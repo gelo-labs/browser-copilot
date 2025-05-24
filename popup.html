@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeloLabs: Shorts Blocker</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-row">
+            <img src="icons/icon128.png" alt="GeloLabs Logo" class="header-logo">
+            <h1>GeloLabs: Shorts Blocker</h1>
+        </div>
+        <div class="header-divider"></div>
+
+        <div class="time-saved-section">
+            <h2>Time Saved:</h2>
+            <div class="time-saved-row">
+                <span id="time-saved-value">Calculating...</span>
+                <span class="hours-label">hours</span>
+                <span class="info-icon" data-tooltip="Reference number, based on average person's usage">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+                    <circle cx="10" cy="10" r="9" stroke="#b4b4b8" stroke-width="2" fill="none"/>
+                    <rect x="9" y="8" width="2" height="6" rx="1" fill="#b4b4b8"/>
+                    <rect x="9" y="5" width="2" height="2" rx="1" fill="#b4b4b8"/>
+                  </svg>
+                </span>
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <button id="toggle-button">Loading...</button>
+            <p id="confirmation-text" class="confirmation" style="display: none;">
+                Short-form content can be addictive and may negatively impact your attention span. 
+                Are you sure you want to disable the blocker?
+            </p>
+            <button id="confirm-disable-button" class="confirmation-button" style="display: none;">Yes, I understand the risks</button>
+             <button id="cancel-disable-button" class="confirmation-button" style="display: none;">Cancel</button>
+        </div>
+        
+        <div class="links-section">
+            <div class="rate-message">Rate this extension, so other people<br>could save some time too</div>
+            <a href="YOUR_CHROME_WEB_STORE_LINK_HERE" id="rate-link" target="_blank">
+                <span class="rate-stars">★★★★★</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> 
