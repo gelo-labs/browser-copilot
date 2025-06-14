@@ -1,6 +1,9 @@
 // GeloTools Browser Hub - popup.js
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if this is first run and show pin suggestion
+    checkFirstRun();
+    
     // Initialize all components
     initializeShortsBlocker();
     initializeFocusTimer();
@@ -11,6 +14,87 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCurrentTab();
     initializeSettings();
 });
+
+// === FIRST RUN & PIN SUGGESTION ===
+function checkFirstRun() {
+    chrome.storage.sync.get(['hasShownPinSuggestion'], (result) => {
+        if (!result.hasShownPinSuggestion) {
+            showPinSuggestion();
+            chrome.storage.sync.set({ hasShownPinSuggestion: true });
+        }
+    });
+}
+
+function showPinSuggestion() {
+    // Create pin suggestion overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: inherit;
+    `;
+
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        background: #242530;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 320px;
+        border: 1px solid #313244;
+        text-align: center;
+        color: #cdd6f4;
+    `;
+
+    modal.innerHTML = `
+        <div style="font-size: 2em; margin-bottom: 16px;">📌</div>
+        <h3 style="margin: 0 0 12px 0; color: #cdd6f4; font-size: 1.2em;">Pin GeloTools for Easy Access</h3>
+        <p style="margin: 0 0 20px 0; color: #a6adc8; font-size: 0.9em; line-height: 1.4;">
+            For the best experience, pin this extension to your toolbar by clicking the puzzle icon 🧩 in your browser and selecting the pin icon next to GeloTools.
+        </p>
+        <button id="got-it-btn" style="
+            background: #89b4fa;
+            color: #1e1e2e;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 8px;
+        ">Got it!</button>
+        <button id="remind-later-btn" style="
+            background: transparent;
+            color: #a6adc8;
+            border: 1px solid #45475a;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+        ">Remind me later</button>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    // Event listeners
+    document.getElementById('got-it-btn').addEventListener('click', () => {
+        overlay.remove();
+    });
+
+    document.getElementById('remind-later-btn').addEventListener('click', () => {
+        // Clear the flag so it shows again next time
+        chrome.storage.sync.set({ hasShownPinSuggestion: false });
+        overlay.remove();
+    });
+}
 
 // === SHORTS BLOCKER ===
 function initializeShortsBlocker() {

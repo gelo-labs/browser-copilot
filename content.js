@@ -107,8 +107,10 @@ function applyBlockingRules() {
     setTikTokScrollBlocked(false);
   }
 
-  // Remove YouTube games preview window (YouTube Игротека)
-  removeYouTubeGamesPreview();
+  // Remove YouTube games from recommendations  
+  if (platform && platform.name === 'youtube') {
+    removeYouTubeGamesPreview();
+  }
 }
 
 function getPlatform(url) {
@@ -326,6 +328,10 @@ function setupMutationObserver(platform) {
   observer = new MutationObserver(() => {
     if (currentState.blockingState === 'active') {
       injectBlockingStyles(platform);
+      // Always remove YouTube games when blocking is active
+      if (platform.name === 'youtube') {
+        removeYouTubeGamesPreview();
+      }
     }
   });
 
@@ -401,12 +407,63 @@ function setTikTokScrollBlocked(enable) {
     }
 }
 
-// Remove YouTube games preview window (YouTube Игротека)
+// Remove YouTube games from recommendations and feed
 function removeYouTubeGamesPreview() {
-  const sections = document.querySelectorAll('ytd-rich-section-renderer');
+  // Enhanced selectors for YouTube gaming content
+  const gameSelectors = [
+    // Gaming shelf/section
+    'ytd-rich-section-renderer',
+    // Gaming videos in recommendations
+    'ytd-compact-video-renderer[href*="/gaming"]',
+    'ytd-video-meta-block[href*="/gaming"]',
+    // Gaming shelf containers
+    'ytd-shelf-renderer:has([href*="/gaming"])',
+    // Gaming cards and previews
+    'ytd-game-details-renderer',
+    'ytd-gaming-video-renderer',
+    // Live gaming streams
+    'ytd-video-renderer:has([aria-label*="Live"])',
+    // Gaming trending shelf
+    'ytd-expanded-shelf-contents-renderer:has([href*="/gaming"])'
+  ];
+
+  // Remove by content (language-agnostic)
+  const sections = document.querySelectorAll('ytd-rich-section-renderer, ytd-shelf-renderer');
   sections.forEach(section => {
-    if (section.textContent && section.textContent.includes('Игротека')) {
+    const text = section.textContent?.toLowerCase() || '';
+    // Remove gaming sections (supports multiple languages)
+    if (text.includes('игротека') || text.includes('gaming') || text.includes('games') || 
+        text.includes('play') && text.includes('free') || text.includes('live gaming')) {
       section.remove();
+    }
+  });
+
+  // Remove by selectors
+  gameSelectors.forEach(selector => {
+    try {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(el => el.remove());
+    } catch (e) {
+      // Ignore invalid selectors
+    }
+  });
+
+  // Remove gaming videos from recommendations feed
+  const videoRenderers = document.querySelectorAll('ytd-video-renderer, ytd-compact-video-renderer');
+  videoRenderers.forEach(video => {
+    const titleElement = video.querySelector('#video-title, .ytd-video-meta-block');
+    const channelElement = video.querySelector('#channel-name, .ytd-channel-name');
+    
+    if (titleElement || channelElement) {
+      const title = titleElement?.textContent?.toLowerCase() || '';
+      const channel = channelElement?.textContent?.toLowerCase() || '';
+      
+      // Check for gaming keywords
+      const gamingKeywords = ['game', 'gaming', 'gameplay', 'playthrough', 'let\'s play', 'walkthrough', 'review game'];
+      
+      if (gamingKeywords.some(keyword => title.includes(keyword) || channel.includes(keyword))) {
+        video.remove();
+      }
     }
   });
 }
