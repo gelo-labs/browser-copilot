@@ -1,4 +1,4 @@
-// GeloTools Blocker - background.js
+// GeloTools Browser Hub - background.js
 
 // --- Constants ---
 const DAILY_HOURS_SAVED_ESTIMATE = 1.05;
@@ -125,7 +125,46 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ timeSaved: timeSaved });
     });
     return true; // Indicates response will be sent asynchronously
+  } else if (request.action === 'timerCompleted') {
+    // Show notification when focus timer completes
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: 'icons/icon48.png',
+      title: 'Focus Timer Complete!',
+      message: 'Great job! Time for a short break.'
+    });
+    return true;
+  } else if (request.action === 'clearCache') {
+    // Clear browser cache
+    chrome.browsingData.removeCache({}, () => {
+      sendResponse({ success: true });
+    });
+    return true;
+  } else if (request.action === 'openIncognito') {
+    // Open new incognito window
+    chrome.windows.create({ incognito: true }, (window) => {
+      sendResponse({ success: true, windowId: window.id });
+    });
+    return true;
   }
 });
 
-console.log("GeloTools Blocker background script loaded."); 
+// --- Site Blocking Feature ---
+chrome.webRequest.onBeforeRequest.addListener(
+  (details) => {
+    chrome.storage.sync.get(['blockedSites'], (result) => {
+      const blockedSites = result.blockedSites || [];
+      const url = new URL(details.url);
+      
+      if (blockedSites.some(site => url.hostname.includes(site))) {
+        chrome.tabs.update(details.tabId, {
+          url: chrome.runtime.getURL('blocked.html')
+        });
+      }
+    });
+  },
+  { urls: ["<all_urls>"] },
+  ["blocking"]
+);
+
+console.log("GeloTools Browser Hub background script loaded."); 

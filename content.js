@@ -150,20 +150,24 @@ function injectBlockingStyles(platform) {
     `;
   }
 
-  // Hide Shorts side/action buttons when blocking is active (always)
-  cssText += `
-    #actions,
-    #like-button,
-    #dislike-button,
-    #comments-button,
-    #menu-button,
-    #pivot-button,
-    #navigation-button-down,
-    #navigation-button-up,
-    ytd-shorts-player-controls[button-location="navigation"] {
-      display: none !important;
-    }
+  // Hide Shorts side/action buttons only on Shorts pages
+  if (platform.name === 'youtube' && isDirectContent) {
+    cssText += `
+      #actions,
+      #like-button,
+      #dislike-button,
+      #comments-button,
+      #menu-button,
+      #pivot-button,
+      #navigation-button-down,
+      #navigation-button-up,
+      ytd-shorts-player-controls[button-location="navigation"] {
+        display: none !important;
+      }
+    `;
+  }
 
+  cssText += `
     .gelotools-blocked-message {
       display: flex !important;
       justify-content: center !important;

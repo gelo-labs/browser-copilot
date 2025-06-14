@@ -1,125 +1,288 @@
-// GeloTools Blocker - popup.js
+// GeloTools Browser Hub - popup.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    const toggleButton = document.getElementById('toggle-button');
-    const timeSavedValue = document.getElementById('time-saved-value');
-    const confirmationText = document.getElementById('confirmation-text');
-    const confirmDisableButton = document.getElementById('confirm-disable-button');
-    const cancelDisableButton = document.getElementById('cancel-disable-button');
+    // Initialize all components
+    initializeShortsBlocker();
+    initializeFocusTimer();
+    initializeTabManager();
+    initializeSiteBlocker();
+    initializeQuickActions();
+    initializeNotes();
+    initializeCurrentTab();
+    initializeSettings();
+});
 
-    let currentState = 'loading'; // Can be 'loading', 'active', 'inactive', 'confirming'
+// === SHORTS BLOCKER ===
+function initializeShortsBlocker() {
+    const toggleButton = document.getElementById('toggle-blocker-button');
+    const statusElement = document.getElementById('blocker-status');
+    const modal = document.getElementById('confirmation-modal');
+    const confirmButton = document.getElementById('confirm-disable-button');
+    const cancelButton = document.getElementById('cancel-disable-button');
+    const timeSavedElement = document.getElementById('time-saved-value');
 
-    // --- Update UI Functions ---
+    let currentState = 'loading';
 
-    function updateButtonUI() {
-        if (currentState === 'loading') {
-            toggleButton.textContent = 'Loading...';
-            toggleButton.disabled = true;
-            toggleButton.className = ''; // Remove active/inactive classes
-            confirmationText.style.display = 'none';
-            confirmDisableButton.style.display = 'none';
-            cancelDisableButton.style.display = 'none';
-        } else if (currentState === 'active') {
-            toggleButton.textContent = 'Blocker Active';
-            toggleButton.disabled = false;
-            toggleButton.className = 'active'; 
-            toggleButton.style.display = 'block'; // Ensure main button is visible
-            confirmationText.style.display = 'none';
-            confirmDisableButton.style.display = 'none';
-            cancelDisableButton.style.display = 'none';
-        } else if (currentState === 'inactive') {
-            toggleButton.textContent = 'Blocker Disabled';
-            toggleButton.disabled = false;
-            toggleButton.className = 'inactive';
-            toggleButton.style.display = 'block';
-            confirmationText.style.display = 'none';
-            confirmDisableButton.style.display = 'none';
-            cancelDisableButton.style.display = 'none';
-        } else if (currentState === 'confirming') {
-            toggleButton.style.display = 'none'; // Hide main button during confirmation
-            confirmationText.style.display = 'block';
-            confirmDisableButton.style.display = 'inline-block'; // Or block, depending on desired layout
-            cancelDisableButton.style.display = 'inline-block'; // Or block
-        }
-    }
-
-    function updateTimeSavedUI() {
-        timeSavedValue.textContent = 'Calculating...';
-        chrome.runtime.sendMessage({ action: 'getTimeSaved' }, (response) => {
-            if (chrome.runtime.lastError) {
-                console.error("Error getting time saved:", chrome.runtime.lastError);
-                timeSavedValue.textContent = 'Error';
-            } else if (response && typeof response.timeSaved !== 'undefined') {
-                timeSavedValue.textContent = response.timeSaved;
+    function updateBlockerUI() {
+        chrome.storage.sync.get(['blockingState'], (result) => {
+            currentState = result.blockingState || 'active';
+            
+            if (currentState === 'active') {
+                statusElement.textContent = 'Active';
+                statusElement.className = 'tool-status active';
+                toggleButton.textContent = 'Disable Blocker';
+                toggleButton.className = 'tool-button';
             } else {
-                 timeSavedValue.textContent = 'N/A';
+                statusElement.textContent = 'Disabled';
+                statusElement.className = 'tool-status inactive';
+                toggleButton.textContent = 'Enable Blocker';
+                toggleButton.className = 'tool-button active';
             }
         });
     }
 
-    // --- Event Listeners ---
+    function updateTimeSaved() {
+        chrome.runtime.sendMessage({ action: 'getTimeSaved' }, (response) => {
+            if (chrome.runtime.lastError) {
+                console.error("Error getting time saved:", chrome.runtime.lastError);
+                timeSavedElement.textContent = '0';
+            } else if (response && typeof response.timeSaved !== 'undefined') {
+                timeSavedElement.textContent = response.timeSaved;
+            } else {
+                timeSavedElement.textContent = '0';
+            }
+        });
+    }
 
     toggleButton.addEventListener('click', () => {
-        chrome.storage.sync.get(['blockingState'], (result) => {
-            const currentBlockingState = result.blockingState || 'active';
-            if (currentBlockingState === 'active') {
-                // User wants to disable -> show confirmation
-                currentState = 'confirming';
-                updateButtonUI();
-            } else {
-                // User wants to enable -> just enable directly
-                chrome.storage.sync.set({ blockingState: 'active' }, () => {
-                    currentState = 'active';
-                    updateButtonUI();
-                    updateTimeSavedUI(); // Recalculate time saved immediately
+        if (currentState === 'active') {
+            modal.style.display = 'flex';
+        } else {
+            chrome.storage.sync.set({ blockingState: 'active' }, () => {
+                updateBlockerUI();
+                updateTimeSaved();
+            });
+        }
+    });
+
+    confirmButton.addEventListener('click', () => {
+        chrome.storage.sync.set({ blockingState: 'inactive' }, () => {
+            modal.style.display = 'none';
+            updateBlockerUI();
+        });
+    });
+
+    cancelButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Initialize
+    updateBlockerUI();
+    updateTimeSaved();
+}
+
+// === FOCUS TIMER ===
+function initializeFocusTimer() {
+    const startButton = document.getElementById('start-timer-button');
+    const timerDisplay = document.getElementById('timer-display');
+    const statusElement = document.getElementById('timer-status');
+    
+    let timerInterval = null;
+    let timeLeft = 25 * 60; // 25 minutes in seconds
+    let isRunning = false;
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimerDisplay() {
+        timerDisplay.textContent = formatTime(timeLeft);
+    }
+
+    function startTimer() {
+        isRunning = true;
+        statusElement.textContent = 'Running';
+        statusElement.className = 'tool-status running';
+        startButton.textContent = 'Pause';
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            
+            if (timeLeft <= 0) {
+                stopTimer();
+                // Timer completed notification
+                chrome.runtime.sendMessage({ action: 'timerCompleted' });
+            }
+        }, 1000);
+    }
+
+    function pauseTimer() {
+        isRunning = false;
+        statusElement.textContent = 'Paused';
+        statusElement.className = 'tool-status';
+        startButton.textContent = 'Resume';
+        clearInterval(timerInterval);
+    }
+
+    function stopTimer() {
+        isRunning = false;
+        statusElement.textContent = 'Completed';
+        statusElement.className = 'tool-status active';
+        startButton.textContent = 'Start';
+        clearInterval(timerInterval);
+        timeLeft = 25 * 60;
+        updateTimerDisplay();
+    }
+
+    startButton.addEventListener('click', () => {
+        if (!isRunning) {
+            startTimer();
+        } else {
+            pauseTimer();
+        }
+    });
+
+    updateTimerDisplay();
+}
+
+// === TAB MANAGER ===
+function initializeTabManager() {
+    const tabCountElement = document.getElementById('tab-count');
+    const closeDuplicatesButton = document.getElementById('close-duplicates-button');
+    const bookmarkAllButton = document.getElementById('bookmark-all-button');
+
+    function updateTabCount() {
+        chrome.tabs.query({}, (tabs) => {
+            tabCountElement.textContent = `${tabs.length} tabs`;
+        });
+    }
+
+    closeDuplicatesButton.addEventListener('click', () => {
+        chrome.tabs.query({}, (tabs) => {
+            const urlMap = new Map();
+            const duplicates = [];
+
+            tabs.forEach(tab => {
+                if (urlMap.has(tab.url)) {
+                    duplicates.push(tab.id);
+                } else {
+                    urlMap.set(tab.url, tab.id);
+                }
+            });
+
+            if (duplicates.length > 0) {
+                chrome.tabs.remove(duplicates, () => {
+                    updateTabCount();
                 });
             }
         });
     });
 
-    confirmDisableButton.addEventListener('click', () => {
-        // User confirmed disabling
-        chrome.storage.sync.set({ blockingState: 'inactive' }, () => {
-             currentState = 'inactive';
-             updateButtonUI();
-             // Time saved updates automatically via background listener
+    bookmarkAllButton.addEventListener('click', () => {
+        chrome.tabs.query({}, (tabs) => {
+            const timestamp = new Date().toISOString().split('T')[0];
+            chrome.bookmarks.create({
+                title: `Session ${timestamp}`
+            }, (folder) => {
+                tabs.forEach(tab => {
+                    if (!tab.url.startsWith('chrome://')) {
+                        chrome.bookmarks.create({
+                            parentId: folder.id,
+                            title: tab.title,
+                            url: tab.url
+                        });
+                    }
+                });
+            });
         });
     });
 
-    cancelDisableButton.addEventListener('click', () => {
-        // User cancelled disabling -> revert to previous state
-        chrome.storage.sync.get(['blockingState'], (result) => {
-            currentState = result.blockingState || 'active'; // Revert to actual stored state
-             updateButtonUI();
-        });
-    });
+    updateTabCount();
+}
 
-    // --- Initial Load ---
+// === SITE BLOCKER ===
+function initializeSiteBlocker() {
+    const statusElement = document.getElementById('site-blocker-status');
+    const manageButton = document.getElementById('manage-blocklist-button');
 
-    function initializePopup() {
-        console.log("Initializing popup...");
-        chrome.storage.sync.get(['blockingState'], (result) => {
-            currentState = result.blockingState || 'active'; // Default to active if not set
-            console.log("Initial state:", currentState);
-            updateButtonUI();
-            updateTimeSavedUI();
-        });
-
-        // Listen for changes happening while popup is open
-        chrome.storage.onChanged.addListener((changes, namespace) => {
-          if (namespace === 'sync' && changes.blockingState) {
-            console.log("Detected state change while popup open:", changes.blockingState.newValue);
-            // Only update if not currently in confirmation step
-            if (currentState !== 'confirming') {
-                currentState = changes.blockingState.newValue;
-                updateButtonUI();
-            }
-            // Always update time saved display
-            updateTimeSavedUI(); 
-          }
+    function updateBlockedCount() {
+        chrome.storage.sync.get(['blockedSites'], (result) => {
+            const blockedSites = result.blockedSites || [];
+            statusElement.textContent = `${blockedSites.length} blocked`;
         });
     }
 
-    initializePopup();
+    manageButton.addEventListener('click', () => {
+        chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+    });
 
-}); 
+    updateBlockedCount();
+}
+
+// === QUICK ACTIONS ===
+function initializeQuickActions() {
+    const clearCacheButton = document.getElementById('clear-cache-button');
+    const incognitoButton = document.getElementById('incognito-button');
+
+    clearCacheButton.addEventListener('click', () => {
+        chrome.browsingData.removeCache({}, () => {
+            clearCacheButton.textContent = '✓ Cleared';
+            setTimeout(() => {
+                clearCacheButton.textContent = 'Clear Cache';
+            }, 2000);
+        });
+    });
+
+    incognitoButton.addEventListener('click', () => {
+        chrome.windows.create({ incognito: true });
+    });
+}
+
+// === NOTES ===
+function initializeNotes() {
+    const notesTextarea = document.getElementById('quick-notes');
+
+    // Load saved notes
+    chrome.storage.sync.get(['quickNotes'], (result) => {
+        if (result.quickNotes) {
+            notesTextarea.value = result.quickNotes;
+        }
+    });
+
+    // Save notes on input
+    let saveTimeout;
+    notesTextarea.addEventListener('input', () => {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+            chrome.storage.sync.set({ quickNotes: notesTextarea.value });
+        }, 500);
+    });
+}
+
+// === CURRENT TAB INFO ===
+function initializeCurrentTab() {
+    const currentDomainElement = document.getElementById('current-domain');
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]) {
+            try {
+                const url = new URL(tabs[0].url);
+                currentDomainElement.textContent = url.hostname;
+            } catch (e) {
+                currentDomainElement.textContent = 'Unknown';
+            }
+        }
+    });
+}
+
+// === SETTINGS ===
+function initializeSettings() {
+    const settingsButton = document.getElementById('settings-button');
+
+    settingsButton.addEventListener('click', () => {
+        chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+    });
+} 
