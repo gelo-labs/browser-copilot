@@ -1,6 +1,6 @@
-# GeloTools: Browser Hub
+# GeloTools: Shorts Blocker
 
-Your personal browser assistant hub with productivity tools, content blocking, and customizable features to help you stay focused and organized.
+A Chrome extension to help you regain control over your time by blocking addictive short-form content on popular social media platforms.
 
 ## Features
 
