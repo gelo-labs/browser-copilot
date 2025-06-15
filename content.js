@@ -1533,7 +1533,7 @@ function getConversationHistory() {
 async function queryLLM(question, subtitles) {
   // Get API key from storage, fallback to hardcoded key for testing
   const result = await chrome.storage.sync.get(['geminiApiKey']);
-  const apiKey = result.geminiApiKey || 'AIzaSyAWveuHToCCshOuoZzJueAPeYXAL0j-Bo8';
+  const apiKey = result.geminiApiKey;
   
   if (!apiKey) {
     return `❌ Please set up your Google Gemini API key first. Go to the extension settings to add your API key. You can get a free API key at: https://makersuite.google.com/app/apikey`;
