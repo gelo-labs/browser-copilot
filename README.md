@@ -1,93 +1,138 @@
-# GeloTools: Shorts Blocker
+# GeloLabs: Browser Copilot
 
-A Chrome extension to help you regain control over your time by blocking addictive short-form content on popular social media platforms.
+**Your intelligent YouTube companion** - Block distracting content and get AI-powered insights from any video.
 
-## Features
+[![Chrome Web Store](https://img.shields.io/badge/Chrome-Web%20Store-blue?style=flat-square&logo=google-chrome)](https://chrome.google.com/webstore)
+[![Version](https://img.shields.io/badge/version-2.0.0-green?style=flat-square)](https://github.com/gelo-labs/browser-copilot)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
-- Blocks endless scrolling on:
-  - YouTube Shorts
-  - Instagram Reels
-  - TikTok For You page
-- Allows viewing direct links to content while preventing feed-like behavior
-- Temporary disable options (10, 20, or 30 minutes)
-- Clean, minimalistic dark UI
-- Privacy-focused with minimal permissions
-- Completely open-source and auditable
+## ✨ Features
 
-## Installation
+### 🚫 **Smart Content Blocking**
+- **YouTube Shorts Blocker**: Automatically hides YouTube Shorts from your feed for distraction-free browsing
+- **Gaming Content Filter**: Removes gaming videos from recommendations (multi-language support)
+- **Intelligent Detection**: Only affects YouTube, leaves other websites completely untouched
+- **One-Click Toggle**: Easy on/off control directly from the extension popup
 
-1. Download the extension from the Chrome Web Store (link coming soon)
+### 🤖 **AI Video Assistant** *(Powered by Google Gemini)*
+- **Instant Video Analysis**: Click the GeloLabs icon in YouTube's header to ask questions about any video
+- **Smart Transcript Extraction**: Automatically processes video captions and transcripts
+- **Conversational AI**: Get summaries, key points, and detailed answers with conversation memory
+- **Quick Actions**: One-click buttons for "Summarize", "Main Points", and "Action Items"
+- **Free Tier**: Uses Google Gemini API with generous free limits (15 requests/min, 1,500/day)
+
+### 📊 **Usage Tracking**
+- **Time Saved Counter**: See how much time you've saved by blocking distracting content
+- **Statistics Dashboard**: Track your productivity improvements over time
+
+## 🚀 Installation
+
+### From Chrome Web Store *(Recommended)*
+1. Visit the [Chrome Web Store page](https://chrome.google.com/webstore) *(Coming Soon)*
 2. Click "Add to Chrome"
-3. The GeloTools icon will appear in your browser toolbar
+3. Confirm installation
+4. The extension icon will appear in your toolbar
 
-### Manual Installation (Developer Mode)
+### Manual Installation *(Developer Mode)*
+1. Download the latest release from [GitHub](https://github.com/gelo-labs/browser-copilot)
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" in the top right corner
+4. Click "Load unpacked" and select the extension folder
+5. The extension will be installed and ready to use
 
-1. Clone this repository or download the ZIP
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" in the top right
-4. Click "Load unpacked" and select the extension directory
+## ⚙️ Setup Guide
 
-## Usage
+### Basic Content Blocking
+✅ **Works immediately** - No setup required! The content blocker activates automatically after installation.
 
-### Basic Usage
+### AI Features Setup
+1. **Get your free API key**: Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. **Configure the extension**: Click the extension icon → Settings → Enter your API key
+3. **Start using AI**: Look for the GeloLabs icon in YouTube's header (next to the notification bell)
+4. **Ask questions**: Click the icon on any video page to start your AI conversation!
 
-- Click the GeloTools icon in your toolbar to see the current status
-- The extension automatically blocks short-form content on supported platforms
-- When visiting a direct link to a video/reel, you can watch that specific content
+## 💡 AI Usage Examples
 
-### Temporary Disable
+**Quick Actions:**
+- 📝 "Summarize this video"
+- 🎯 "What are the main points?"
+- ⚡ "Any actionable advice?"
 
-1. Click the GeloTools icon
-2. Choose a duration: 10, 20, or 30 minutes
-3. The extension will automatically resume blocking after the selected time
+**Detailed Questions:**
+- "Explain the concept mentioned at 5:30"
+- "What tools and resources were recommended?"
+- "How does this relate to [specific topic]?"
+- "What are the pros and cons discussed?"
 
-### Permanent Disable
+## 🔒 Privacy & Security
 
-1. Click the GeloTools icon
-2. Click "Disable Forever"
-3. Review the warning about time spent on short-form content
-4. Confirm your choice
+**Your privacy is our priority:**
+- ✅ **Local Processing**: Content analysis happens in your browser when possible
+- ✅ **Secure Storage**: API keys stored securely in Chrome's encrypted sync storage
+- ✅ **No Data Collection**: We don't collect, store, or sell your personal data
+- ✅ **YouTube Only**: Extension only operates on YouTube domains
+- ✅ **Encrypted Communication**: All API calls use HTTPS encryption
+- ✅ **Open Source**: Full transparency - inspect our code anytime
 
-## Privacy
+## 🛠️ Technical Specifications
 
-GeloTools: Shorts Blocker respects your privacy:
+- **Manifest Version**: 3 (Latest Chrome standard)
+- **Permissions**: Minimal - only Storage and YouTube access
+- **AI Provider**: Google Gemini Pro API
+- **Supported Content**: Videos with captions, transcripts, or subtitles
+- **Browser Support**: Chrome 88+ (Manifest V3 compatible)
+- **Performance**: Lightweight - minimal impact on browsing speed
 
-- No data collection
-- No external connections
-- Minimal permissions (only youtube.com, instagram.com, tiktok.com)
-- Settings stored locally using chrome.storage.sync
+## 📈 Version History
 
-## Statistics
+### v2.0.0 - Current Release
+- 🆕 AI Video Assistant with Google Gemini integration
+- 🆕 Conversational chat interface with memory
+- 🆕 Quick action buttons for common queries
+- 🆕 Enhanced content blocking with gaming filter
+- 🆕 Time saved tracking and statistics
+- 🔧 Improved performance and stability
 
-Average daily time spent on short-form content:
+### v1.x - Legacy
+- Basic YouTube Shorts blocking functionality
 
-- TikTok: 95 minutes
-- Instagram Reels: 53 minutes
-- YouTube Shorts: 60 minutes
+## 🤝 Contributing
 
-That's more than 5 hours a week, or almost 11 full days per year spent on auto-scrolling content.
+We welcome contributions! Here's how to get started:
 
-## Contributing
+1. **Fork** the repository
+2. **Create** your feature branch: `git checkout -b feature/amazing-feature`
+3. **Commit** your changes: `git commit -m 'Add amazing feature'`
+4. **Push** to the branch: `git push origin feature/amazing-feature`
+5. **Open** a Pull Request
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Development Setup
+```bash
+git clone https://github.com/gelo-labs/browser-copilot.git
+cd browser-copilot
+# Load unpacked extension in Chrome Developer Mode
+```
 
-## License
+## 📞 Support & Feedback
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**Need help or have suggestions?**
+- 📧 **Email**: hello@gelolabs.com
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/gelo-labs/browser-copilot/issues)
+- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/gelo-labs/browser-copilot/discussions)
+- ⭐ **Rate Us**: [Chrome Web Store](https://chrome.google.com/webstore) *(Coming Soon)*
 
-## Acknowledgments
+## 📄 License
 
-- Icons by [Phosphor Icons](https://phosphoricons.com/)
-- Statistics sourced from recent social media usage studies
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## Support
+---
 
-If you encounter any issues or have suggestions:
+<div align="center">
 
-1. Check the [Issues](https://github.com/gelotools/shorts-blocker/issues) page
-2. Open a new issue if your problem isn't already reported
-3. Provide detailed information about the problem 
+**Built with ❤️ by [GeloLabs](https://gelolabs.com)**
+
+*Making the web more productive, one extension at a time.*
+
+[![Follow us](https://img.shields.io/badge/Follow-@GeloLabs-blue?style=social&logo=twitter)](https://twitter.com/gelolabs)
+
+</div> 
