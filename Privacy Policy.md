@@ -1,7 +1,7 @@
 # Privacy Policy for GeloLabs: Browser Copilot
 
-**Effective Date**: December 2024  
-**Last Updated**: December 2024
+**Effective Date**: June 2025  
+**Last Updated**: June 2025
 
 ## Overview
 
