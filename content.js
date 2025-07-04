@@ -113,13 +113,8 @@ function injectBlockingStyles(platform) {
   // Only apply narrowing/centering on direct Shorts/Reels/FYP pages
   if (isDirectContent) {
     cssText += `
-      /* Aggressively make the whole window and overlay narrower and centered */
-      body, #page-manager, ytd-app {
-        max-width: 95vw !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        overflow-x: hidden !important;
-      }
+      /* Remove problematic page-wide styles that were causing header displacement */
+      /* Keeping this section for potential future use but removing the styles */
     `;
   }
 
@@ -145,13 +140,11 @@ function injectBlockingStyles(platform) {
       display: flex !important;
       justify-content: center !important;
       align-items: center !important;
-      width: 95vw !important;
-      max-width: 95vw !important;
+      width: 100vw !important;
       height: 100vh !important;
       position: fixed !important;
-      left: 50% !important;
+      left: 0 !important;
       top: 0 !important;
-      transform: translateX(-50%) !important;
       background: #232426;
       z-index: 999999;
       text-align: center !important;
@@ -255,8 +248,6 @@ function injectBlockingStyles(platform) {
           ${ytDirectLinkNoScrollCenterSelectors.join(',\n          ')} {
               overflow: hidden !important;
               scroll-snap-type: none !important;
-              margin-left: auto !important;
-              margin-right: auto !important;
               display: block !important;
               height: 100vh !important;
               max-height: 100vh !important;
@@ -482,30 +473,22 @@ function injectYouTubeHeaderIcon() {
   if (!window.location.href.includes('youtube.com')) return;
   if (document.getElementById('gelolabs-yt-icon')) return;
 
-  // Wait for YouTube header to load - target the notification button's parent
-  let targetContainer = document.querySelector('ytd-masthead #end');
+  // Wait for YouTube header to load - find the right side container
+  let rightContainer = document.querySelector('ytd-masthead #end #buttons');
   
-  // Fallback selectors
-  if (!targetContainer) {
-    targetContainer = document.querySelector('#masthead #end');
-  }
-  if (!targetContainer) {
-    targetContainer = document.querySelector('ytd-notification-topbar-button-renderer')?.parentElement;
-  }
-  if (!targetContainer) {
-    targetContainer = document.querySelector('[aria-label*="Уведомления"]')?.parentElement;
+  if (!rightContainer) {
+    rightContainer = document.querySelector('#masthead #end #buttons');
   }
   
-  if (!targetContainer) {
-    console.log('GeloLabs: Target container not found, retrying...');
+  if (!rightContainer) {
+    console.log('GeloLabs: Right container not found, retrying...');
     setTimeout(() => injectYouTubeHeaderIcon(), 2000);
     return;
   }
   
-  console.log('GeloLabs: Found target container:', targetContainer);
-  console.log('GeloLabs: Container children:', Array.from(targetContainer.children).map(c => c.tagName));
+  console.log('GeloLabs: Found right container:', rightContainer);
 
-  // Create a simple div that looks like YouTube's buttons
+  // Create icon that matches YouTube's header style
   const iconContainer = document.createElement('div');
   iconContainer.id = 'gelolabs-yt-icon';
   iconContainer.style.cssText = `
@@ -516,9 +499,9 @@ function injectYouTubeHeaderIcon() {
     height: 40px;
     cursor: pointer;
     transition: all 0.2s ease;
-    position: relative;
-    margin: 0 8px;
+    margin-right: 4px;
     flex-shrink: 0;
+    order: -1;
   `;
   
   console.log('GeloLabs: Created icon container');
@@ -526,11 +509,9 @@ function injectYouTubeHeaderIcon() {
   // Create the icon (adaptive to theme)
   const icon = document.createElement('img');
   
-  // Detect YouTube theme more reliably
+  // Detect YouTube theme
   const isDarkMode = document.documentElement.hasAttribute('dark') || 
-                    document.documentElement.getAttribute('data-cast-api-enabled') === 'true' ||
-                    document.querySelector('html[dark]') !== null ||
-                    getComputedStyle(document.documentElement).getPropertyValue('--yt-spec-base-background').includes('24, 24, 24');
+                    document.querySelector('html[dark]') !== null;
   
   // Use appropriate icon based on theme
   icon.src = chrome.runtime.getURL(isDarkMode ? 'icons/logo2.png' : 'icons/logo1.png');
@@ -542,13 +523,11 @@ function injectYouTubeHeaderIcon() {
   `;
   icon.alt = 'GeloLabs AI Assistant';
   
-  console.log('GeloLabs: Using', isDarkMode ? 'light logo (logo2)' : 'dark logo (logo1)', 'for', isDarkMode ? 'dark' : 'light', 'theme');
+  console.log('GeloLabs: Using', isDarkMode ? 'light logo (logo2)' : 'dark logo (logo1)');
   
   iconContainer.appendChild(icon);
-  
-  console.log('GeloLabs: Added icon to container');
 
-  // Add hover effects with 360° spin
+  // Add hover effects
   iconContainer.addEventListener('mouseenter', () => {
     iconContainer.style.backgroundColor = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
     iconContainer.style.borderRadius = '50%';
@@ -560,7 +539,7 @@ function injectYouTubeHeaderIcon() {
     icon.style.transform = 'rotate(0deg)';
   });
 
-  // Add click handler to open LLM interface
+  // Add click handler
   iconContainer.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -570,16 +549,9 @@ function injectYouTubeHeaderIcon() {
   // Add tooltip
   iconContainer.title = 'GeloLabs: Ask about this video';
 
-  // Find the best insertion point - before the notification button
-  const notificationButton = targetContainer.querySelector('ytd-notification-topbar-button-renderer');
-  if (notificationButton) {
-    console.log('GeloLabs: Inserting before notification button');
-    targetContainer.insertBefore(iconContainer, notificationButton);
-  } else {
-    // Fallback: insert at the end of the container
-    console.log('GeloLabs: Appending to end of target container');
-    targetContainer.appendChild(iconContainer);
-  }
+  // Insert as FIRST element in the right buttons container
+  rightContainer.insertBefore(iconContainer, rightContainer.firstChild);
+  console.log('GeloLabs: Icon inserted as first element in right container');
   
   console.log('GeloLabs: Icon injected successfully!');
 }
