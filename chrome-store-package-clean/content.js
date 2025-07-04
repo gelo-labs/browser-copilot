@@ -449,7 +449,7 @@ applyBlockingRules();
 
 // Wait a bit for YouTube to load, then inject icon
 setTimeout(() => {
-  console.log('GeloLabs: Attempting to inject header icon...');
+  
   injectYouTubeHeaderIcon();
 }, 2000);
 
@@ -474,7 +474,7 @@ new MutationObserver(() => {
     
     // Re-inject icon if needed
     setTimeout(() => {
-      console.log('GeloLabs: URL changed, re-injecting icon...');
+      
       injectYouTubeHeaderIcon();
     }, 2000);
   }
@@ -501,13 +501,12 @@ function injectYouTubeHeaderIcon() {
   }
   
   if (!targetContainer) {
-    console.log('GeloLabs: Target container not found, retrying...');
+    
     setTimeout(() => injectYouTubeHeaderIcon(), 2000);
     return;
   }
   
-  console.log('GeloLabs: Found target container:', targetContainer);
-  console.log('GeloLabs: Container children:', Array.from(targetContainer.children).map(c => c.tagName));
+  
 
   // Create a simple div that looks like YouTube's buttons
   const iconContainer = document.createElement('div');
@@ -524,7 +523,7 @@ function injectYouTubeHeaderIcon() {
     margin: 0 4px;
   `;
   
-  console.log('GeloLabs: Created icon container');
+  
 
   // Create the icon (adaptive to theme)
   const icon = document.createElement('img');
@@ -545,11 +544,11 @@ function injectYouTubeHeaderIcon() {
   `;
   icon.alt = 'GeloLabs AI Assistant';
   
-  console.log('GeloLabs: Using', isDarkMode ? 'light logo (logo2)' : 'dark logo (logo1)', 'for', isDarkMode ? 'dark' : 'light', 'theme');
+  
   
   iconContainer.appendChild(icon);
   
-  console.log('GeloLabs: Added icon to container');
+  
 
   // Add hover effects with 360° spin
   iconContainer.addEventListener('mouseenter', () => {
@@ -580,7 +579,7 @@ function injectYouTubeHeaderIcon() {
   );
   
   if (notificationButton && targetContainer.contains(notificationButton)) {
-    console.log('GeloLabs: Inserting before notification button:', notificationButton);
+    
     targetContainer.insertBefore(iconContainer, notificationButton);
   } else {
     // Try to find it by looking for the bell icon specifically
@@ -590,15 +589,15 @@ function injectYouTubeHeaderIcon() {
     });
     
     if (bellButton) {
-      console.log('GeloLabs: Found bell button, inserting before it:', bellButton);
+      
       targetContainer.insertBefore(iconContainer, bellButton);
     } else {
-      console.log('GeloLabs: No bell found, inserting at beginning');
+      
       targetContainer.insertBefore(iconContainer, targetContainer.firstChild);
     }
   }
   
-  console.log('GeloLabs: Icon injected successfully!');
+  
 }
 
 // Open main interface menu
@@ -1021,7 +1020,7 @@ async function preOpenTranscript() {
   }
 
   if (transcriptButton) {
-    console.log('GeloLabs: Pre-opening transcript for better extraction...');
+    
     transcriptButton.click();
     transcriptOpened = true;
     
@@ -1216,14 +1215,14 @@ async function handleLLMQuery() {
   
   // Add user message to chat first
   const userMessageId = addMessageToChat('user', question);
-  console.log('GeloLabs: Added user message with ID:', userMessageId);
+  
   
   // Small delay to ensure user message is rendered
   await new Promise(resolve => setTimeout(resolve, 100));
   
   // Add loading message
   const loadingId = addMessageToChat('assistant', 'Analyzing video content...');
-  console.log('GeloLabs: Added loading message with ID:', loadingId);
+  
   
   try {
     // Get video subtitles
@@ -1236,11 +1235,11 @@ async function handleLLMQuery() {
 
     // Process with LLM
     const response = await queryLLM(question, subtitles);
-    console.log('GeloLabs: Updating loading message with response');
+    
     updateMessage(loadingId, response);
     
   } catch (error) {
-    console.error('LLM query error:', error);
+    
     updateMessage(loadingId, '❌ Sorry, there was an error processing your request. Please try again.');
   }
 }
@@ -1337,7 +1336,7 @@ function updateMessage(messageId, newText) {
 
 // Test function to check subtitle coverage
 async function testSubtitleExtraction() {
-  console.log('🔍 Testing subtitle extraction...');
+
   
   // Add a message to chat showing the test
   const testMessageId = addMessageToChat('assistant', 'Testing subtitle extraction...');
@@ -1348,13 +1347,6 @@ async function testSubtitleExtraction() {
     const wordCount = subtitles.split(' ').length;
     const charCount = subtitles.length;
     const estimatedMinutes = Math.round(wordCount / 150); // Average reading speed
-    
-    console.log('📊 Subtitle Analysis:');
-    console.log(`- Characters: ${charCount.toLocaleString()}`);
-    console.log(`- Words: ${wordCount.toLocaleString()}`);
-    console.log(`- Estimated content: ~${estimatedMinutes} minutes`);
-    console.log(`- First 200 chars: "${subtitles.substring(0, 200)}..."`);
-    console.log(`- Last 200 chars: "...${subtitles.substring(subtitles.length - 200)}"`);
     
     // Update the chat message with detailed results
     const testResults = `**📊 Subtitle Extraction Test Results:**
@@ -1379,7 +1371,7 @@ async function testSubtitleExtraction() {
     showNotification(`Extracted ${wordCount.toLocaleString()} words (~${estimatedMinutes} min of content)`);
     return subtitles;
   } else {
-    console.log('❌ No subtitles found');
+
     updateMessage(testMessageId, '❌ **No subtitles found for this video**\n\nThis could mean:\n- Video has no captions/subtitles\n- Captions are auto-generated and not accessible\n- Video is too new and captions haven\'t been processed\n- Technical issue with subtitle extraction\n\n**Recommendation:** Try videos with manual captions for best results.');
     showNotification('No subtitles found for this video');
     return null;
@@ -1446,7 +1438,7 @@ async function extractVideoSubtitles() {
       }
 
       if (transcriptButton) {
-        console.log('GeloLabs: Fallback - opening transcript during extraction...');
+
         transcriptButton.click();
         transcriptOpened = true;
         
@@ -1497,7 +1489,7 @@ async function extractVideoSubtitles() {
 
     return null;
   } catch (error) {
-    console.error('Error extracting subtitles:', error);
+
     return null;
   }
 }
@@ -1593,7 +1585,7 @@ IMPORTANT FORMATTING INSTRUCTIONS:
     }
     
   } catch (error) {
-    console.error('LLM API error:', error);
+
     return '❌ Error connecting to AI service. Please check your internet connection and try again.';
   }
 }
