@@ -245,21 +245,25 @@ function injectBlockingStyles(platform) {
               }
           `;
       }
-      // Disable all scrolling on Shorts pages
+      // Prevent Scroll & Center (revert to previously working method)
+      if (ytDirectLinkNoScrollCenterSelectors.length > 0) {
+          cssText += `
+              /* YT Direct: No Scroll & Center (classic) */
+              ${ytDirectLinkNoScrollCenterSelectors.join(',\n              ')} {
+                  overflow-y: hidden !important;
+                  scroll-snap-type: none !important;
+                  margin-left: auto !important;
+                  margin-right: auto !important;
+                  display: block !important;
+              }
+          `;
+      }
+      // Remove all flex/grid centering rules from parent containers
+      // Ensure page scroll
       cssText += `
-          /* YT Direct: Disable All Scrolling */
-          html, body, ytd-app, #page-manager {
-              overflow: hidden !important;
-              height: 100vh !important;
-          }
-          ${ytDirectLinkNoScrollCenterSelectors.join(',\n          ')} {
-              overflow: hidden !important;
-              scroll-snap-type: none !important;
-              margin-left: auto !important;
-              margin-right: auto !important;
-              display: block !important;
-              height: 100vh !important;
-              max-height: 100vh !important;
+          /* YT Direct: Allow Page Scroll */
+          html, body {
+              overflow: auto !important;
           }
       `;
   }
@@ -515,9 +519,10 @@ function injectYouTubeHeaderIcon() {
     height: 40px;
     cursor: pointer;
     transition: all 0.2s ease;
-    position: fixed;
-    right: 120px;
-    top: 8px;
+    position: absolute;
+    right: 260px;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 1000;
     margin: 0;
   `;

@@ -245,25 +245,21 @@ function injectBlockingStyles(platform) {
               }
           `;
       }
-      // Prevent Scroll & Center (revert to previously working method)
-      if (ytDirectLinkNoScrollCenterSelectors.length > 0) {
-          cssText += `
-              /* YT Direct: No Scroll & Center (classic) */
-              ${ytDirectLinkNoScrollCenterSelectors.join(',\n              ')} {
-                  overflow-y: hidden !important;
-                  scroll-snap-type: none !important;
-                  margin-left: auto !important;
-                  margin-right: auto !important;
-                  display: block !important;
-              }
-          `;
-      }
-      // Remove all flex/grid centering rules from parent containers
-      // Ensure page scroll
+      // Disable all scrolling on Shorts pages
       cssText += `
-          /* YT Direct: Allow Page Scroll */
-          html, body {
-              overflow: auto !important;
+          /* YT Direct: Disable All Scrolling */
+          html, body, ytd-app, #page-manager {
+              overflow: hidden !important;
+              height: 100vh !important;
+          }
+          ${ytDirectLinkNoScrollCenterSelectors.join(',\n          ')} {
+              overflow: hidden !important;
+              scroll-snap-type: none !important;
+              margin-left: auto !important;
+              margin-right: auto !important;
+              display: block !important;
+              height: 100vh !important;
+              max-height: 100vh !important;
           }
       `;
   }
@@ -520,8 +516,11 @@ function injectYouTubeHeaderIcon() {
     height: 40px;
     cursor: pointer;
     transition: all 0.2s ease;
-    position: relative;
-    margin: 0 4px;
+    position: fixed;
+    right: 120px;
+    top: 8px;
+    z-index: 1000;
+    margin: 0;
   `;
   
   console.log('GeloLabs: Created icon container');
@@ -573,29 +572,14 @@ function injectYouTubeHeaderIcon() {
   // Add tooltip
   iconContainer.title = 'GeloLabs: Ask about this video';
 
-  // Find the notification button specifically (bell icon)
-  const directChildren = Array.from(targetContainer.children);
-  const notificationButton = directChildren.find(child => 
-    child.tagName === 'YTD-NOTIFICATION-TOPBAR-BUTTON-RENDERER'
-  );
-  
-  if (notificationButton && targetContainer.contains(notificationButton)) {
-    console.log('GeloLabs: Inserting before notification button:', notificationButton);
-    targetContainer.insertBefore(iconContainer, notificationButton);
+  // Use absolute positioning, append to masthead container
+  const masthead = document.querySelector('ytd-masthead') || document.querySelector('#masthead');
+  if (masthead) {
+    console.log('GeloLabs: Appending icon to masthead with absolute positioning');
+    masthead.appendChild(iconContainer);
   } else {
-    // Try to find it by looking for the bell icon specifically
-    const bellButton = directChildren.find(child => {
-      const button = child.querySelector('button[aria-label*="Уведомления"], button[aria-label*="notification"]');
-      return button !== null;
-    });
-    
-    if (bellButton) {
-      console.log('GeloLabs: Found bell button, inserting before it:', bellButton);
-      targetContainer.insertBefore(iconContainer, bellButton);
-    } else {
-      console.log('GeloLabs: No bell found, inserting at beginning');
-      targetContainer.insertBefore(iconContainer, targetContainer.firstChild);
-    }
+    console.log('GeloLabs: Masthead not found, appending to target container');
+    targetContainer.appendChild(iconContainer);
   }
   
   console.log('GeloLabs: Icon injected successfully!');
