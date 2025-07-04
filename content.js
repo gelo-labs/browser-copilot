@@ -516,11 +516,9 @@ function injectYouTubeHeaderIcon() {
     height: 40px;
     cursor: pointer;
     transition: all 0.2s ease;
-    position: fixed;
-    right: 120px;
-    top: 8px;
-    z-index: 1000;
-    margin: 0;
+    position: relative;
+    margin: 0 8px;
+    flex-shrink: 0;
   `;
   
   console.log('GeloLabs: Created icon container');
@@ -572,13 +570,14 @@ function injectYouTubeHeaderIcon() {
   // Add tooltip
   iconContainer.title = 'GeloLabs: Ask about this video';
 
-  // Use absolute positioning, append to masthead container
-  const masthead = document.querySelector('ytd-masthead') || document.querySelector('#masthead');
-  if (masthead) {
-    console.log('GeloLabs: Appending icon to masthead with absolute positioning');
-    masthead.appendChild(iconContainer);
+  // Find the best insertion point - before the notification button
+  const notificationButton = targetContainer.querySelector('ytd-notification-topbar-button-renderer');
+  if (notificationButton) {
+    console.log('GeloLabs: Inserting before notification button');
+    targetContainer.insertBefore(iconContainer, notificationButton);
   } else {
-    console.log('GeloLabs: Masthead not found, appending to target container');
+    // Fallback: insert at the end of the container
+    console.log('GeloLabs: Appending to end of target container');
     targetContainer.appendChild(iconContainer);
   }
   
