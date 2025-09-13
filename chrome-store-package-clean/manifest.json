@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GeloLabs: Browser Copilot",
-  "description": "Your browser copilot for blocking YouTube Shorts, analyzing videos with AI, and capturing meeting notes from Google Meet. Open beta - report issues to hello@gelolabs.com",
+  "description": "Block YouTube Shorts, analyze videos with AI, take notes, and manage clipboard. Your browser copilot for productivity.",
   "version": "2.3.0",
   "icons": {
     "16": "icons/icon16.png",
