@@ -88,11 +88,23 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
   
   if (info.menuItemId === 'toggleTeleprompter') {
-    chrome.tabs.sendMessage(tab.id, { action: 'toggleTeleprompter' });
+    // Inject GeloNotes script dynamically
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['teleprompter-overlay.js']
+    }, () => {
+      chrome.tabs.sendMessage(tab.id, { action: 'toggleTeleprompter' });
+    });
   }
   
   if (info.menuItemId === 'toggleClipboardManager') {
-    chrome.tabs.sendMessage(tab.id, { action: 'toggleClipboardManager' });
+    // Inject GeloClipboard script dynamically
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['clipboard-overlay.js']
+    }, () => {
+      chrome.tabs.sendMessage(tab.id, { action: 'toggleClipboardManager' });
+    });
   }
   
   if (info.menuItemId === 'saveToClipboard') {
@@ -152,11 +164,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   
   if (request.action === 'toggleTeleprompter') {
-    // Forward teleprompter toggle to active tab
+    // Forward teleprompter toggle to active tab with dynamic injection
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleTeleprompter' }, (response) => {
-          sendResponse(response || { success: false });
+        // Inject GeloNotes script dynamically
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id },
+          files: ['teleprompter-overlay.js']
+        }, () => {
+          chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleTeleprompter' }, (response) => {
+            sendResponse(response || { success: false });
+          });
         });
       } else {
         sendResponse({ success: false, error: 'No active tab' });
@@ -166,11 +184,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   
   if (request.action === 'toggleClipboardManager') {
-    // Forward clipboard manager toggle to active tab
+    // Forward clipboard manager toggle to active tab with dynamic injection
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleClipboardManager' }, (response) => {
-          sendResponse(response || { success: false });
+        // Inject GeloClipboard script dynamically
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id },
+          files: ['clipboard-overlay.js']
+        }, () => {
+          chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleClipboardManager' }, (response) => {
+            sendResponse(response || { success: false });
+          });
         });
       } else {
         sendResponse({ success: false, error: 'No active tab' });

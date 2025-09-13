@@ -41,12 +41,6 @@
       ],
       "js": ["gelolabs-content.js", "test-logo-spinner.js"],
       "run_at": "document_idle"
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["teleprompter-overlay.js", "clipboard-overlay.js"],
-      "run_at": "document_idle",
-      "all_frames": false
     }
   ],
   "action": {
