@@ -1,131 +1,349 @@
-// GeloLabs Browser Assistant - background.js
+// Background script for GeloLabs: Browser Copilot
+// Handles extension lifecycle and Google Meet monitoring
 
-// --- Constants ---
-const DAILY_HOURS_SAVED_ESTIMATE = 1.05;
+// Extension state management
+let extensionState = {
+  blockingEnabled: true,
+  timeSaved: 0,
+  lastUpdate: Date.now()
+};
 
-// --- Storage Keys ---
-const INSTALL_TIME_KEY = 'installTime';
-const BLOCKING_STATE_KEY = 'blockingState'; // 'active' or 'inactive'
-const DISABLED_PERIODS_KEY = 'disabledPeriods'; // Array of { start: timestamp, end: timestamp }
+// Load saved state on startup
+chrome.storage.sync.get(['blockingState', 'timeSaved'], (result) => {
+  extensionState.blockingEnabled = result.blockingState !== 'inactive';
+  extensionState.timeSaved = result.timeSaved || 0;
+});
 
-// --- Initialization ---
+// Listen for storage changes
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.blockingState) {
+    extensionState.blockingEnabled = changes.blockingState.newValue !== 'inactive';
+  }
+  if (changes.timeSaved) {
+    extensionState.timeSaved = changes.timeSaved.newValue || 0;
+  }
+});
 
-// Set install time on first install
-chrome.runtime.onInstalled.addListener(details => {
+// Handle extension installation
+chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    chrome.storage.sync.set({ 
-        [INSTALL_TIME_KEY]: Date.now(),
-        [BLOCKING_STATE_KEY]: 'active', // Start active by default
-        [DISABLED_PERIODS_KEY]: [] 
-    }, () => {
-        console.log('GeloTools Blocker installed. State initialized.');
+    // Set default state
+    chrome.storage.sync.set({
+      blockingState: 'active',
+      timeSaved: 0
     });
-  } else if (details.reason === 'update') {
-    // Optional: Handle updates if storage structure changes
-    console.log('GeloTools Blocker updated.');
-    // Ensure default state exists if somehow missing after update
-    chrome.storage.sync.get([BLOCKING_STATE_KEY], (result) => {
-        if (!result[BLOCKING_STATE_KEY]) {
-            chrome.storage.sync.set({ [BLOCKING_STATE_KEY]: 'active' });
-        }
-    });
-     // Ensure install time exists if somehow missing after update
-     chrome.storage.sync.get([INSTALL_TIME_KEY], (result) => {
-        if (!result[INSTALL_TIME_KEY]) {
-            chrome.storage.sync.set({ [INSTALL_TIME_KEY]: Date.now() }); // Set to now if missing
-        }
-    });
-     // Ensure disabled periods exists if somehow missing after update
-     chrome.storage.sync.get([DISABLED_PERIODS_KEY], (result) => {
-        if (!result[DISABLED_PERIODS_KEY]) {
-            chrome.storage.sync.set({ [DISABLED_PERIODS_KEY]: [] }); 
-        }
-    });
-  }
-});
-
-// --- State Change Handling ---
-
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace === 'sync' && changes[BLOCKING_STATE_KEY]) {
-    const oldState = changes[BLOCKING_STATE_KEY].oldValue;
-    const newState = changes[BLOCKING_STATE_KEY].newValue;
-    const timestamp = Date.now();
-
-    console.log(`Blocking state changed from ${oldState} to ${newState} at ${timestamp}`);
-
-    chrome.storage.sync.get([DISABLED_PERIODS_KEY], (result) => {
-      let periods = result[DISABLED_PERIODS_KEY] || [];
-
-      if (oldState === 'active' && newState === 'inactive') {
-        // Started being disabled: Add a new period with only a start time
-        periods.push({ start: timestamp, end: null });
-        console.log('Started disabled period');
-      } else if (oldState === 'inactive' && newState === 'active') {
-        // Stopped being disabled: Find the last open period and set its end time
-        const lastPeriod = periods.find(p => p.end === null);
-        if (lastPeriod) {
-          lastPeriod.end = timestamp;
-          console.log('Ended disabled period');
-        } else {
-            console.warn('Re-enabled blocker, but could not find matching start time for disabled period.');
-            // Optionally, handle this case - maybe assume it started at install time?
-        }
-      }
-      
-      // Save the updated periods
-      chrome.storage.sync.set({ [DISABLED_PERIODS_KEY]: periods });
-    });
-  }
-});
-
-// --- Time Saved Calculation ---
-
-function calculateTimeSaved(callback) {
-  chrome.storage.sync.get([INSTALL_TIME_KEY, DISABLED_PERIODS_KEY], (result) => {
-    const installTime = result[INSTALL_TIME_KEY];
-    const disabledPeriods = result[DISABLED_PERIODS_KEY] || [];
-
-    if (!installTime) {
-      console.error("Install time not found!");
-      callback(0); // Return 0 if install time is missing
-      return;
-    }
-
-    const now = Date.now();
-    const totalTimeElapsedMs = now - installTime;
-
-    let totalDisabledMs = 0;
-    disabledPeriods.forEach(period => {
-      const endTime = period.end || now; // If period is still ongoing, count until now
-      // Ensure start time is valid and before end time
-      if (period.start && period.start < endTime) { 
-          totalDisabledMs += (endTime - period.start);
-      }
-    });
-
-    const totalEnabledMs = totalTimeElapsedMs - totalDisabledMs;
-    if (totalEnabledMs < 0) totalEnabledMs = 0; // Floor at 0
-
-    const totalEnabledDays = totalEnabledMs / (1000 * 60 * 60 * 24);
-    const estimatedHoursSaved = totalEnabledDays * DAILY_HOURS_SAVED_ESTIMATE;
-
-    // Round to 1 decimal place
-    const roundedHoursSaved = Math.round(estimatedHoursSaved * 10) / 10;
     
-    callback(roundedHoursSaved);
+    // Create context menu for Meet notes activation
+    chrome.contextMenus.create({
+      id: 'activateMeetNotes',
+      title: 'Activate Meeting Notes',
+      contexts: ['page'],
+      documentUrlPatterns: ['*://meet.google.com/*']
+    });
+    
+    // Create context menu for notes
+    chrome.contextMenus.create({
+      id: 'toggleTeleprompter',
+      title: 'Open GeloNotes',
+      contexts: ['page']
+    });
+    
+    // Create context menu for clipboard manager
+    chrome.contextMenus.create({
+      id: 'toggleClipboardManager',
+      title: 'Open GeloClipboard',
+      contexts: ['page']
+    });
+    
+    // Create context menu for clipboard manager (selection)
+    chrome.contextMenus.create({
+      id: 'saveToClipboard',
+      title: 'Save to GeloClipboard',
+      contexts: ['selection']
+    });
+    
+    // Create context menu for YouTube AI Assistant
+    chrome.contextMenus.create({
+      id: 'openYouTubeAI',
+      title: 'Open YouTube Video AI',
+      contexts: ['page'],
+      documentUrlPatterns: ['*://www.youtube.com/*', '*://youtube.com/*']
+    });
+  }
+});
+
+// Completely non-invasive approach - no script injection at all
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url && tab.url.includes('meet.google.com')) {
+    // Don't inject any script - just log that we detected Google Meet
+    console.log('Google Meet detected - using non-invasive approach (no script injection)');
+  }
+});
+
+// Handle context menu clicks
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === 'activateMeetNotes' && tab.url && tab.url.includes('meet.google.com')) {
+    // Instead of injecting script, just notify the user
+    console.log('User requested Meet notes activation - using popup interface only');
+  }
+  
+  if (info.menuItemId === 'toggleTeleprompter') {
+    chrome.tabs.sendMessage(tab.id, { action: 'toggleTeleprompter' });
+  }
+  
+  if (info.menuItemId === 'toggleClipboardManager') {
+    chrome.tabs.sendMessage(tab.id, { action: 'toggleClipboardManager' });
+  }
+  
+  if (info.menuItemId === 'saveToClipboard') {
+    // Save selected text to clipboard manager
+    const selectedText = info.selectionText;
+    if (selectedText) {
+      saveToClipboardManager(selectedText, 'context');
+    }
+  }
+  
+  if (info.menuItemId === 'openYouTubeAI') {
+    // Trigger YouTube AI Assistant
+    chrome.tabs.sendMessage(tab.id, { action: 'openYouTubeAI' });
+  }
+});
+
+// Handle messages from content scripts
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'updateTimeSaved') {
+    extensionState.timeSaved = request.timeSaved;
+    chrome.storage.sync.set({ timeSaved: request.timeSaved });
+    sendResponse({ success: true });
+  }
+  
+  if (request.action === 'getState') {
+    sendResponse({
+      blockingEnabled: extensionState.blockingEnabled,
+      timeSaved: extensionState.timeSaved
+    });
+  }
+  
+  if (request.action === 'getTimeSaved') {
+    sendResponse({ timeSaved: extensionState.timeSaved });
+  }
+  
+  if (request.action === 'activateMeetNotes') {
+    // Just acknowledge the request - no script injection
+    console.log('Meet notes activation requested - using popup interface only');
+    sendResponse({ success: true });
+  }
+  
+  if (request.action === 'getCurrentTabId') {
+    // Send back the current tab ID for tab affinity
+    sendResponse({ tabId: sender.tab ? sender.tab.id : null });
+  }
+  
+  if (request.action === 'copilot:busy') {
+    // Forward copilot busy message to gelolabs.com tabs
+    forwardMessageToGeloLabsTabs('copilot:busy', { reason: request.reason, tabId: sender.tab ? sender.tab.id : null });
+    sendResponse({ success: true });
+  }
+  
+  if (request.action === 'copilot:idle') {
+    // Forward copilot idle message to gelolabs.com tabs
+    forwardMessageToGeloLabsTabs('copilot:idle', { tabId: sender.tab ? sender.tab.id : null });
+    sendResponse({ success: true });
+  }
+  
+  if (request.action === 'toggleTeleprompter') {
+    // Forward teleprompter toggle to active tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleTeleprompter' }, (response) => {
+          sendResponse(response || { success: false });
+        });
+      } else {
+        sendResponse({ success: false, error: 'No active tab' });
+      }
+    });
+    return true; // Keep message channel open for async response
+  }
+  
+  if (request.action === 'toggleClipboardManager') {
+    // Forward clipboard manager toggle to active tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleClipboardManager' }, (response) => {
+          sendResponse(response || { success: false });
+        });
+      } else {
+        sendResponse({ success: false, error: 'No active tab' });
+      }
+    });
+    return true; // Keep message channel open for async response
+  }
+  
+  if (request.action === 'openTeleprompterWithContent') {
+    // Forward to active tab to open teleprompter with specific content
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { 
+          action: 'openTeleprompterWithContent',
+          content: request.content
+        }, (response) => {
+          sendResponse(response || { success: true });
+        });
+      } else {
+        sendResponse({ success: false, error: 'No active tab' });
+      }
+    });
+    return true; // Keep message channel open for async response
+  }
+  
+  if (request.action === 'addToClipboard') {
+    // Save text to clipboard manager
+    if (request.text) {
+      saveToClipboardManager(request.text, request.source || 'external', request.noteId).then(() => {
+        // Notify clipboard manager to refresh UI
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs[0]) {
+            chrome.tabs.sendMessage(tabs[0].id, { 
+              action: 'addToClipboard',
+              text: request.text,
+              source: request.source || 'external',
+              noteId: request.noteId
+            }).catch(() => {
+              // Ignore errors if clipboard manager is not open
+            });
+          }
+        });
+        sendResponse({ success: true });
+      });
+    } else {
+      sendResponse({ success: false, error: 'No text provided' });
+    }
+  }
+});
+
+// Handle extension icon click
+chrome.action.onClicked.addListener((tab) => {
+  if (tab.url && tab.url.includes('youtube.com')) {
+    // Open popup for YouTube
+    chrome.action.setPopup({ popup: 'popup.html' });
+  } else if (tab.url && tab.url.includes('meet.google.com')) {
+    // For Google Meet, just open popup - no script injection
+    console.log('Extension clicked on Google Meet - opening popup interface');
+  }
+});
+
+// Update time saved counter
+function updateTimeSaved() {
+  if (extensionState.blockingEnabled) {
+    extensionState.timeSaved += 0.1; // Add 6 minutes (0.1 hours)
+    chrome.storage.sync.set({ timeSaved: extensionState.timeSaved });
+  }
+}
+
+// Update every 6 minutes (360000 ms)
+setInterval(updateTimeSaved, 360000);
+
+// Keyboard shortcuts are handled directly in content scripts for Alt+G+Number combinations
+
+// Helper function to forward messages to gelolabs.com tabs
+function forwardMessageToGeloLabsTabs(action, data) {
+  chrome.tabs.query({ url: ['*://gelolabs.com/*', '*://www.gelolabs.com/*'] }, (tabs) => {
+    tabs.forEach(tab => {
+      chrome.tabs.sendMessage(tab.id, {
+        action: action,
+        ...data
+      }).catch(error => {
+        // Ignore errors for tabs that don't have the content script loaded
+        console.log('Could not send message to GeloLabs tab:', tab.id);
+      });
+    });
   });
 }
 
-// --- Message Listener for Popup ---
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'getTimeSaved') {
-    calculateTimeSaved(timeSaved => {
-      sendResponse({ timeSaved: timeSaved });
-    });
-    return true; // Indicates response will be sent asynchronously
+// Helper function to save text to clipboard manager
+async function saveToClipboardManager(text, source = 'context', noteId = null) {
+  if (!text || !text.trim()) return;
+  
+  try {
+    const STORAGE_KEY = 'clipboardItems';
+    const SETTINGS_KEY = 'clipboardSettings';
+    const DEFAULT_LIMIT = 1000;
+    const PREVIEW_LENGTH = 100;
+    
+    // Get current data
+    const result = await chrome.storage.local.get([STORAGE_KEY, SETTINGS_KEY]);
+    const items = result[STORAGE_KEY] || [];
+    const settings = result[SETTINGS_KEY] || { limit: DEFAULT_LIMIT };
+    
+    const cleanText = text.trim();
+    
+    // For notes, check if we already have an item with this noteId
+    if (noteId && source === 'notes') {
+      const existingIndex = items.findIndex(item => item.noteId === noteId);
+      if (existingIndex !== -1) {
+        // Update existing note item
+        items[existingIndex] = {
+          ...items[existingIndex],
+          text: cleanText,
+          preview: cleanText.length > PREVIEW_LENGTH 
+            ? cleanText.substring(0, PREVIEW_LENGTH) + '...' 
+            : cleanText,
+          timestamp: Date.now(),
+          source
+        };
+        
+        await chrome.storage.local.set({ [STORAGE_KEY]: items });
+        console.log(`🔄 Updated note item: "${cleanText.substring(0, 50)}..."`);
+        return;
+      }
+    }
+    
+    // Check for text duplicates (for non-note items or new notes)
+    const existingIndex = items.findIndex(item => item.text === cleanText);
+    if (existingIndex !== -1) {
+      // Move existing item to top
+      const existingItem = items[existingIndex];
+      items.splice(existingIndex, 1);
+      items.unshift({
+        ...existingItem,
+        timestamp: Date.now(),
+        source,
+        noteId: noteId || existingItem.noteId
+      });
+    } else {
+      // Add new item
+      const newItem = {
+        id: `clip_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        text: cleanText,
+        preview: cleanText.length > PREVIEW_LENGTH 
+          ? cleanText.substring(0, PREVIEW_LENGTH) + '...' 
+          : cleanText,
+        timestamp: Date.now(),
+        pinned: false,
+        source,
+        tag: null,
+        noteId: noteId || null
+      };
+      
+      items.unshift(newItem);
+    }
+    
+    // Auto-trim if over limit (but keep pinned items)
+    if (items.length > settings.limit) {
+      const unpinnedItems = items.filter(item => !item.pinned);
+      const pinnedItems = items.filter(item => item.pinned);
+      const keepCount = settings.limit - pinnedItems.length;
+      const keptUnpinned = unpinnedItems.slice(0, Math.max(0, keepCount));
+      const finalItems = [...pinnedItems, ...keptUnpinned];
+      
+      await chrome.storage.local.set({ [STORAGE_KEY]: finalItems });
+    } else {
+      await chrome.storage.local.set({ [STORAGE_KEY]: items });
+    }
+    
+    console.log(`📋 Saved to clipboard manager: "${cleanText.substring(0, 50)}..."`);
+    
+  } catch (error) {
+    console.error('❌ Failed to save to clipboard manager:', error);
   }
-});
-
-console.log("GeloLabs Browser Assistant background script loaded."); 
+} 

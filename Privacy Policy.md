@@ -11,8 +11,9 @@ GeloLabs: Browser Copilot ("the Extension", "we", "us", or "our") is committed t
 
 ### Information We DO NOT Collect
 - **Personal Information**: We do not collect names, email addresses, phone numbers, or other personal identifiers
-- **Browsing History**: We do not track or store your browsing history outside of YouTube
+- **Browsing History**: We do not track or store your browsing history outside of YouTube and Google Meet
 - **Video Viewing Habits**: We do not monitor or record what videos you watch
+- **Meeting Content**: We do not record or store meeting audio or video content
 - **User Analytics**: We do not use analytics services or tracking pixels
 - **Advertising Data**: We do not collect data for advertising purposes
 
@@ -42,11 +43,19 @@ GeloLabs: Browser Copilot ("the Extension", "we", "us", or "our") is committed t
 - **Purpose**: To show you productivity improvements
 - **Retention**: Until you reset the counter or uninstall the extension
 
+#### 5. Meeting Notes Data
+- **What**: Meeting notes captured from Google Meet subtitles (speaker names, timestamps, text content)
+- **Where Stored**: Locally in your browser using Chrome's storage API
+- **Purpose**: To provide meeting notes functionality with speaker identification
+- **Retention**: Until you clear the notes, uninstall the extension, or clear browser data
+- **Processing**: Notes are processed locally and not transmitted to external servers
+
 ## How We Use Information
 
 ### Local Processing
 - Extension settings and preferences are processed entirely within your browser
 - No data is transmitted to our servers for basic content blocking functionality
+- Meeting notes are processed and stored locally without external transmission
 
 ### Third-Party API Usage
 - When you use AI features, video transcripts are sent to Google Gemini API

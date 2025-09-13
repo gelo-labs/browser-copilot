@@ -5,7 +5,52 @@ All notable changes to GeloLabs: Browser Copilot will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2024-12-XX (Current Release)
+## [2.3.0] - 2024-09-13 (Current Release)
+
+### 🆕 Added
+- **GeloNotes**: Floating sticky notes with autoscroll teleprompter mode
+- **GeloClipboard**: High-capacity clipboard manager with 1000 item storage
+- **Logo Spinner**: Interactive physics-based logo spinner on gelolabs.com
+- **Enhanced Context Menus**: Branded right-click menus (GeloNotes, GeloClipboard)
+- **YouTube Video AI Integration**: Right-click context menu for YouTube videos
+- **Keyboard Shortcuts**: Alt+G+1 (Notes), Alt+G+2 (Clipboard), Alt+G+3 (YouTube AI)
+
+### 🎨 Redesigned
+- **Unified Interface**: Consistent black/white/grey color scheme across all menus
+- **Clean Popup Design**: Removed frames, added separator lines, improved spacing
+- **Context-Aware Visibility**: YouTube features only show on YouTube pages
+- **Enhanced Star Ratings**: Bright glow effects with improved hover animations
+
+### 🔧 Improved
+- **Extension Context Handling**: Fixed "Extension context invalidated" errors
+- **Smart Visibility**: YouTube Video AI only shows on video pages (/watch?v=)
+- **Performance Optimization**: Zero polling, efficient event handling
+- **Error Recovery**: Graceful fallbacks for extension context issues
+
+### 🐛 Fixed
+- **Button Color Consistency**: All buttons now use unified grey color scheme
+- **Separator Line Spacing**: Fixed double lines between sections
+- **Background Styling**: Proper light grey background implementation
+- **Context Menu Reliability**: Improved message passing between scripts
+
+## [2.2.0] - 2024-12-XX
+
+### 🆕 Added
+- **Google Meet Integration**: Automatic meeting notes capture from Google Meet
+- **Live Subtitle Detection**: Real-time subtitle monitoring with speaker identification
+- **Smart Notifications**: Prompts to enable subtitles for optimal note-taking
+- **Meeting Notes Interface**: Floating button and notes management panel
+- **Export Functionality**: Download meeting notes as text files
+- **Timestamped Notes**: Each note includes speaker name and timestamp
+- **Meeting-Specific Storage**: Notes saved per meeting with unique meeting IDs
+
+### 🔧 Improved
+- **Multi-Platform Support**: Extension now works on both YouTube and Google Meet
+- **Enhanced Subtitle Detection**: Support for various Google Meet subtitle selectors
+- **User Experience**: Intuitive notifications and interface design
+- **Privacy**: Meeting notes stored locally with no external data transmission
+
+## [2.0.0] - 2024-11-XX
 
 ### 🆕 Added
 - **AI Video Assistant**: Complete integration with Google Gemini API for video analysis

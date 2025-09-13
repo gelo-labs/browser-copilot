@@ -640,9 +640,9 @@ function createMainInterface() {
       <div class="menu-section" style="border-top: 1px solid #333338; padding-top: 16px;">
         <div style="text-align: center;">
           <p style="margin: 0 0 8px 0; color: #888; font-size: 12px;">Enjoying GeloLabs? Help others discover it!</p>
-          <button id="rate-app" style="padding: 8px 16px; background: #4a9eff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s;">
-            ⭐ Rate Extension
-          </button>
+          <a href="https://chromewebstore.google.com/detail/gelolabs-browser-copilot/aipngbhblcdclojoaghdnnomkmblehco" target="_blank" style="text-decoration: none; color: #e3e3e3; transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease; display: inline-block;">
+            <span style="display: block; font-size: 2.1em; color: #e3e3e3; letter-spacing: 0.08em; margin-top: 2px; margin-bottom: 0; transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease;">★★★★★</span>
+          </a>
         </div>
       </div>
     </div>
@@ -713,10 +713,20 @@ function createMainInterface() {
     }, 50);
   });
 
-  // Rate app button
-  document.getElementById('rate-app').addEventListener('click', () => {
-    interface_div.style.display = 'none';
-    window.open('https://chrome.google.com/webstore/detail/gelolabs-browser-assistant/YOUR_EXTENSION_ID', '_blank');
+  // Add hover effects for the rate link
+  const rateLink = interface_div.querySelector('a[href*="chromewebstore.google.com"]');
+  const rateStars = rateLink.querySelector('span');
+  
+  rateLink.addEventListener('mouseenter', () => {
+    rateStars.style.color = '#ffffff';
+    rateStars.style.textShadow = '0 0 12px rgba(255, 255, 255, 0.9), 0 0 24px rgba(255, 255, 255, 0.7), 0 0 36px rgba(255, 255, 255, 0.5), 0 0 48px rgba(255, 255, 255, 0.3)';
+    rateStars.style.transform = 'scale(1.08)';
+  });
+  
+  rateLink.addEventListener('mouseleave', () => {
+    rateStars.style.color = '#e3e3e3';
+    rateStars.style.textShadow = 'none';
+    rateStars.style.transform = 'scale(1)';
   });
 
   // Add hover effects to buttons
@@ -732,14 +742,6 @@ function createMainInterface() {
     });
   });
 
-  // Rate app button hover effect
-  const rateBtn = document.getElementById('rate-app');
-  rateBtn.addEventListener('mouseenter', () => {
-    rateBtn.style.background = '#357abd';
-  });
-  rateBtn.addEventListener('mouseleave', () => {
-    rateBtn.style.background = '#4a9eff';
-  });
 
   // Click outside to close
   document.addEventListener('click', function closeOnClickOutside(e) {

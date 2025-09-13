@@ -10,74 +10,97 @@
     <div class="container">
         <!-- Header Section -->
         <div class="header-row">
-            <img src="icons/icon128.png" alt="GeloTools Logo" class="header-logo">
+            <img src="icons/icon128.png" alt="GeloLabs Logo" class="header-logo">
             <h1>GeloLabs: Browser Copilot</h1>
         </div>
-        <div class="header-divider"></div>
+        <p class="beta-text">Open Beta - Report issues to hello@gelolabs.com</p>
 
-        <!-- Time Saved Section -->
-        <div class="time-saved-section">
-            <h2>Time Saved:</h2>
-            <div class="time-saved-row">
-                <span id="time-saved-value">Calculating...</span>
-                <span class="hours-label">hours</span>
-                <span class="info-icon" data-tooltip="Reference number, based on average person's usage">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-                    <circle cx="10" cy="10" r="9" stroke="#b4b4b8" stroke-width="2" fill="none"/>
-                    <rect x="9" y="8" width="2" height="6" rx="1" fill="#b4b4b8"/>
-                    <rect x="9" y="5" width="2" height="2" rx="1" fill="#b4b4b8"/>
-                  </svg>
-                </span>
+        <!-- Notes Section -->
+        <div class="feature-section">
+            <h3>📝 Notes</h3>
+            <p>Floating sticky notes with autoscroll mode</p>
+            <button id="toggle-teleprompter" class="feature-button">
+                <span class="button-icon">📝</span>
+                <span class="button-text">Open Notes</span>
+            </button>
+            <div class="feature-hint">Alt+G+1 or right-click menu</div>
+        </div>
+
+        <!-- Clipboard Manager Section -->
+        <div class="feature-section">
+            <h3>📋 Clipboard Manager</h3>
+            <p>Floating clipboard history with direct paste</p>
+            <button id="toggle-clipboard" class="feature-button">
+                <span class="button-icon">📋</span>
+                <span class="button-text">Open Clipboard Manager</span>
+            </button>
+            <div class="feature-hint">Alt+G+2 or right-click menu</div>
+        </div>
+
+        <!-- YouTube Video AI Section -->
+        <div class="feature-section" id="youtube-ai-section" style="display: none;">
+            <h3>🤖 YouTube Video AI</h3>
+            <p>Ask questions about any YouTube video</p>
+            <button class="feature-button disabled">
+                <span class="button-icon">🤖</span>
+                <span class="button-text">Available on YouTube</span>
+            </button>
+            <div class="feature-hint">Alt+G+3 or right-click menu</div>
+        </div>
+
+        <!-- Meeting Notes Section -->
+        <div class="feature-section" id="meet-section" style="display: none;">
+            <h3>📝 Meeting Notes</h3>
+            <p>Auto-capture notes from Google Meet</p>
+            <button id="activate-meet-notes-button" class="feature-button">
+                <span class="button-icon">🎤</span>
+                <span class="button-text" id="meet-button-text">Activate Meeting Notes</span>
+            </button>
+            <div class="feature-hint">Enable live captions in Google Meet</div>
+            
+            <!-- Meeting Notes Interface (only shown when activated) -->
+            <div id="meet-notes-interface" class="meet-notes-interface" style="display: none;">
+                <div class="notes-status">
+                    <span id="notes-status-indicator" class="status-indicator">⏳</span>
+                    <span id="notes-status-text">Waiting for subtitles...</span>
+                </div>
+                
+                <div class="notes-controls">
+                    <button id="export-notes-button" class="notes-control-button">Export Notes</button>
+                    <button id="clear-notes-button" class="notes-control-button secondary">Clear Notes</button>
+                </div>
+                
+                <div class="notes-content">
+                    <div id="notes-list" class="notes-list">
+                        <div class="no-notes">No notes captured yet. Enable live captions in Google Meet to start taking notes.</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Controls Section -->
-        <div class="controls-section">
-            <button id="toggle-button">Loading...</button>
+        <!-- YouTube Shorts Blocker Section -->
+        <div class="feature-section" id="youtube-blocker-section" style="display: none;">
+            <h3>🚫 YouTube Shorts Blocker</h3>
+            <p>Block distracting short-form content</p>
+            <button id="toggle-button" class="feature-button">
+                <span class="button-icon">🚫</span>
+                <span class="button-text">Loading...</span>
+            </button>
+            <div class="feature-hint">Automatically active on YouTube</div>
             <p id="confirmation-text" class="confirmation" style="display: none;">
                 Short-form content can be addictive and may negatively impact your attention span. 
                 Are you sure you want to disable the blocker?
             </p>
-            <button id="confirm-disable-button" class="confirmation-button" style="display: none;">Yes, I understand the risks</button>
-             <button id="cancel-disable-button" class="confirmation-button" style="display: none;">Cancel</button>
+            <div class="confirmation-buttons" style="display: none;">
+                <button id="confirm-disable-button" class="confirmation-button">Yes, I understand the risks</button>
+                <button id="cancel-disable-button" class="confirmation-button secondary">Cancel</button>
+            </div>
         </div>
 
-        <!-- AI Section -->
-        <div class="ai-section">
-            <div class="section-header">
-                <h3>🤖 AI Video Assistant</h3>
-                <p>Click the GeloLabs icon next to YouTube's notification bell to ask questions about any video</p>
-            </div>
-            
-            <div class="ai-features">
-                <div class="feature-item">
-                    <span class="feature-icon">📝</span>
-                    <span>Summarize videos</span>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🎯</span>
-                    <span>Extract main points</span>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">⚡</span>
-                    <span>Get actionable advice</span>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">❓</span>
-                    <span>Ask specific questions</span>
-                </div>
-            </div>
-            
-            <div class="ai-status">
-                <span class="status-indicator">✅</span>
-                <span>AI Assistant Ready</span>
-            </div>
-        </div>
-        
-        <!-- Links Section -->
-        <div class="links-section">
-            <div class="rate-message">Rate this extension, so other people<br>could save some time too</div>
-            <a href="YOUR_CHROME_WEB_STORE_LINK_HERE" id="rate-link" target="_blank">
+        <!-- Rate Section -->
+        <div class="rate-section">
+            <div class="rate-message">Rate this extension, so other people could save time too</div>
+            <a href="https://chromewebstore.google.com/detail/gelolabs-browser-copilot/aipngbhblcdclojoaghdnnomkmblehco" id="rate-link" target="_blank">
                 <span class="rate-stars">★★★★★</span>
             </a>
         </div>

@@ -580,34 +580,34 @@ function createMainInterface() {
     position: fixed;
     top: ${buttonRect.top + 50}px;
     right: 20px;
-    background: #1f1f23;
-    border: 1px solid #333338;
+    background: #2c2d30;
+    border: 1px solid #3c3f4a;
     border-radius: 12px;
     width: 420px;
     max-height: 600px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-    color: #e1e1e6;
+    color: #f7f7f8;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     z-index: 10000;
     display: block;
   `;
 
   interface_div.innerHTML = `
-    <div style="padding: 16px; border-bottom: 1px solid #333338; background: #1f1f23;">
+    <div style="padding: 16px; border-bottom: 1px solid #3c3f4a; background: #2c2d30;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
         <h3 style="margin: 0; color: #fff; font-weight: 600; font-size: 16px;">GeloLabs: Browser Copilot</h3>
         <button id="close-menu" style="background: none; border: none; color: #999; font-size: 18px; cursor: pointer; padding: 4px; transition: color 0.2s;">×</button>
       </div>
-              <p style="margin: 0; color: #888; font-size: 12px; font-weight: 400;">Open Beta - Report issues to hello@gelolabs.com</p>
+      <p style="margin: 0; color: #888; font-size: 12px; font-weight: 400;">Open Beta - Report issues to hello@gelolabs.com</p>
     </div>
     
-    <div style="padding: 16px; background: #1a1a1e;">
+    <div style="padding: 16px; background: #232426;">
       <!-- Shorts Blocker Control -->
       <div class="menu-section" style="margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="color: #e1e1e6; font-weight: 600; font-size: 14px;">🚫 Shorts Blocker</span>
-          <button id="toggle-blocker" style="padding: 6px 12px; background: #4a9eff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
+          <span style="color: #f7f7f8; font-weight: 600; font-size: 14px;">🚫 Shorts Blocker</span>
+          <button id="toggle-blocker" style="padding: 6px 12px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
             Loading...
           </button>
         </div>
@@ -617,8 +617,8 @@ function createMainInterface() {
       <!-- AI Assistant Section -->
       <div class="menu-section" style="margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="color: #e1e1e6; font-weight: 600; font-size: 14px;">🤖 AI Video Assistant</span>
-          <button id="open-ai-chat" style="padding: 6px 12px; background: #2a2a2e; border: 1px solid #333338; color: #bbb; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">
+          <span style="color: #f7f7f8; font-weight: 600; font-size: 14px;">🤖 AI Video Assistant</span>
+          <button id="open-ai-chat" style="padding: 6px 12px; background: #3c3f4a; border: 1px solid #3c3f4a; color: #bbb; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">
             Ask AI
           </button>
         </div>
@@ -628,8 +628,8 @@ function createMainInterface() {
       <!-- Settings Section -->
       <div class="menu-section" style="margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="color: #e1e1e6; font-weight: 600; font-size: 14px;">⚙️ Settings</span>
-          <button id="open-settings" style="padding: 6px 12px; background: #2a2a2e; border: 1px solid #333338; color: #bbb; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">
+          <span style="color: #f7f7f8; font-weight: 600; font-size: 14px;">⚙️ Settings</span>
+          <button id="open-settings" style="padding: 6px 12px; background: #3c3f4a; border: 1px solid #3c3f4a; color: #bbb; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">
             Configure
           </button>
         </div>
@@ -637,12 +637,12 @@ function createMainInterface() {
       </div>
       
       <!-- Rate App Section -->
-      <div class="menu-section" style="border-top: 1px solid #333338; padding-top: 16px;">
+      <div class="menu-section" style="border-top: 1px solid #3c3f4a; padding-top: 16px;">
         <div style="text-align: center;">
           <p style="margin: 0 0 8px 0; color: #888; font-size: 12px;">Enjoying GeloLabs? Help others discover it!</p>
-          <button id="rate-app" style="padding: 8px 16px; background: #4a9eff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s;">
-            ⭐ Rate Extension
-          </button>
+          <a href="https://chromewebstore.google.com/detail/gelolabs-browser-copilot/aipngbhblcdclojoaghdnnomkmblehco" target="_blank" style="text-decoration: none; color: #e3e3e3; transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease; display: inline-block;">
+            <span style="display: block; font-size: 2.1em; color: #e3e3e3; letter-spacing: 0.08em; margin-top: 2px; margin-bottom: 0; transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease;">★★★★★</span>
+          </a>
         </div>
       </div>
     </div>
@@ -713,33 +713,37 @@ function createMainInterface() {
     }, 50);
   });
 
-  // Rate app button
-  document.getElementById('rate-app').addEventListener('click', () => {
-    interface_div.style.display = 'none';
-    window.open('https://chrome.google.com/webstore/detail/gelolabs-browser-assistant/YOUR_EXTENSION_ID', '_blank');
+  // Add hover effects for the rate link
+  const rateLink = interface_div.querySelector('a[href*="chromewebstore.google.com"]');
+  const rateStars = rateLink.querySelector('span');
+  
+  rateLink.addEventListener('mouseenter', () => {
+    rateStars.style.color = '#ffffff';
+    rateStars.style.textShadow = '0 0 12px rgba(255, 255, 255, 0.9), 0 0 24px rgba(255, 255, 255, 0.7), 0 0 36px rgba(255, 255, 255, 0.5), 0 0 48px rgba(255, 255, 255, 0.3)';
+    rateStars.style.transform = 'scale(1.08)';
+  });
+  
+  rateLink.addEventListener('mouseleave', () => {
+    rateStars.style.color = '#e3e3e3';
+    rateStars.style.textShadow = 'none';
+    rateStars.style.transform = 'scale(1)';
   });
 
   // Add hover effects to buttons
   ['open-ai-chat', 'open-settings'].forEach(id => {
     const btn = document.getElementById(id);
-    btn.addEventListener('mouseenter', () => {
-      btn.style.background = '#333338';
-      btn.style.color = '#fff';
-    });
-    btn.addEventListener('mouseleave', () => {
-      btn.style.background = '#2a2a2e';
-      btn.style.color = '#bbb';
-    });
+    if (btn) {
+      btn.addEventListener('mouseenter', () => {
+        btn.style.background = '#4a4d56';
+        btn.style.color = '#fff';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.background = '#3c3f4a';
+        btn.style.color = '#bbb';
+      });
+    }
   });
 
-  // Rate app button hover effect
-  const rateBtn = document.getElementById('rate-app');
-  rateBtn.addEventListener('mouseenter', () => {
-    rateBtn.style.background = '#357abd';
-  });
-  rateBtn.addEventListener('mouseleave', () => {
-    rateBtn.style.background = '#4a9eff';
-  });
 
   // Click outside to close
   document.addEventListener('click', function closeOnClickOutside(e) {
@@ -749,6 +753,48 @@ function createMainInterface() {
     }
   });
 }
+
+// Listen for messages from background script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'openYouTubeAI') {
+    // Trigger the same function as Alt+G+3
+    const event = new CustomEvent('gelolabs-open-ai-chat');
+    document.dispatchEvent(event);
+  }
+});
+
+// Listen for Alt+G+3 custom event to open AI chat
+document.addEventListener('gelolabs-open-ai-chat', async (e) => {
+  console.log('🎯 Received gelolabs-open-ai-chat event');
+  
+  // Close main interface if it's open
+  const mainInterface = document.getElementById('gelolabs-main-interface');
+  if (mainInterface) {
+    mainInterface.style.display = 'none';
+  }
+  
+  if (!window.location.href.includes('/watch?v=')) {
+    showNotification('Please navigate to a YouTube video to use AI features.');
+    return;
+  }
+  
+  // Show loading notification
+  showNotification('Opening AI Assistant...');
+  
+  // Ensure current video ID is set
+  const videoId = getCurrentVideoId();
+  if (videoId && !currentVideoId) {
+    currentVideoId = videoId;
+  }
+  
+  // Pre-open transcript before creating chat interface
+  await preOpenTranscript();
+  
+  // Small delay to ensure interface is hidden before creating new one
+  setTimeout(() => {
+    createAIChatInterface();
+  }, 50);
+});
 
 // Get current video ID
 function getCurrentVideoId() {
@@ -812,21 +858,21 @@ function createSettingsInterface() {
     position: fixed;
     top: ${buttonRect.top + 50}px;
     right: 20px;
-    background: #1f1f23;
-    border: 1px solid #333338;
+    background: #2c2d30;
+    border: 1px solid #3c3f4a;
     border-radius: 12px;
     width: 420px;
     max-height: 500px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-    color: #e1e1e6;
+    color: #f7f7f8;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     z-index: 10000;
     display: block;
   `;
 
   interface_div.innerHTML = `
-    <div style="padding: 16px; border-bottom: 1px solid #333338; background: #1f1f23;">
+    <div style="padding: 16px; border-bottom: 1px solid #3c3f4a; background: #2c2d30;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
         <h3 style="margin: 0; color: #fff; font-weight: 600; font-size: 16px;">Settings</h3>
         <button id="close-settings" style="background: none; border: none; color: #999; font-size: 18px; cursor: pointer; padding: 4px; transition: color 0.2s;">×</button>
@@ -834,18 +880,18 @@ function createSettingsInterface() {
       <p style="margin: 0; color: #888; font-size: 12px; font-weight: 400;">Configure your preferences</p>
     </div>
     
-    <div style="padding: 16px; background: #1a1a1e;">
+    <div style="padding: 16px; background: #232426;">
       <!-- API Key Section -->
       <div class="settings-section" style="margin-bottom: 20px;">
         <label style="display: block; color: #e1e1e6; font-weight: 600; font-size: 14px; margin-bottom: 8px;">
           🔑 Google Gemini API Key
         </label>
         <input id="api-key-input" type="password" placeholder="Enter your API key..." 
-               style="width: 100%; padding: 10px 12px; background: #2a2a2e; border: 1px solid #333338; border-radius: 6px; color: #e1e1e6; outline: none; font-size: 14px; box-sizing: border-box;">
+               style="width: 100%; padding: 10px 12px; background: #3c3f4a; border: 1px solid #3c3f4a; border-radius: 6px; color: #e1e1e6; outline: none; font-size: 14px; box-sizing: border-box;">
         <p style="margin: 8px 0 0 0; color: #888; font-size: 12px;">
           Get your free API key at <a href="https://makersuite.google.com/app/apikey" target="_blank" style="color: #4a9eff;">makersuite.google.com</a>
         </p>
-        <button id="save-api-key" style="margin-top: 8px; padding: 6px 12px; background: #4a9eff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
+        <button id="save-api-key" style="margin-top: 8px; padding: 6px 12px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">
           Save API Key
         </button>
       </div>
@@ -1021,21 +1067,21 @@ function createAIChatInterface() {
     position: fixed;
     top: ${buttonRect.top + 50}px;
     right: 20px;
-    background: #1f1f23;
-    border: 1px solid #333338;
+    background: #2c2d30;
+    border: 1px solid #3c3f4a;
     border-radius: 12px;
     width: 420px;
     max-height: 600px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-    color: #e1e1e6;
+    color: #f7f7f8;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     z-index: 10000;
     display: block;
   `;
 
   interface_div.innerHTML = `
-    <div style="padding: 16px; border-bottom: 1px solid #333338; background: #1f1f23;">
+    <div style="padding: 16px; border-bottom: 1px solid #3c3f4a; background: #2c2d30;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
         <h3 style="margin: 0; color: #fff; font-weight: 600; font-size: 16px;">Ask about this video</h3>
         <button id="close-ai-chat" style="background: none; border: none; color: #999; font-size: 18px; cursor: pointer; padding: 4px; transition: color 0.2s;">×</button>
@@ -1043,9 +1089,9 @@ function createAIChatInterface() {
       <p style="margin: 0; color: #888; font-size: 12px; font-weight: 400;">Powered by Google Gemini AI</p>
     </div>
     
-    <div id="llm-chat-container" style="height: 320px; overflow-y: auto; padding: 16px; background: #1a1a1e;">
+    <div id="llm-chat-container" style="height: 320px; overflow-y: auto; padding: 16px; background: #232426;">
       <div id="llm-messages">
-        <div style="padding: 12px; background: #2a2a2e; border-radius: 8px; margin-bottom: 12px; line-height: 1.4;">
+        <div style="padding: 12px; background: #3c3f4a; border-radius: 8px; margin-bottom: 12px; line-height: 1.4;">
           <div style="display: flex; align-items: center; margin-bottom: 6px;">
             <span style="color: #4a9eff; font-weight: 600; font-size: 14px;">🤖 AI Assistant</span>
           </div>
@@ -1056,22 +1102,22 @@ function createAIChatInterface() {
       </div>
     </div>
     
-    <div style="padding: 16px; border-top: 1px solid #333338; background: #1f1f23;">
+    <div style="padding: 16px; border-top: 1px solid #3c3f4a; background: #2c2d30;">
       <form id="llm-form" style="display: flex; gap: 8px; margin-bottom: 12px;">
         <input id="llm-input" type="text" placeholder="Ask about the video..." 
-               style="flex: 1; padding: 10px 12px; background: #2a2a2e; border: 1px solid #333338; border-radius: 6px; color: #e1e1e6; outline: none; font-size: 14px; font-weight: 400;">
-        <button id="llm-send" type="button" style="padding: 10px 16px; background: #4a9eff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s;">
+               style="flex: 1; padding: 10px 12px; background: #3c3f4a; border: 1px solid #3c3f4a; border-radius: 6px; color: #e1e1e6; outline: none; font-size: 14px; font-weight: 400;">
+        <button id="llm-send" type="button" style="padding: 10px 16px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s;">
           Send
         </button>
       </form>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button class="quick-question" data-question="Summarize this video" style="padding: 6px 10px; background: #2a2a2e; border: 1px solid #333338; color: #bbb; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;">
+        <button class="quick-question" data-question="Summarize this video" style="padding: 6px 10px; background: #3c3f4a; border: 1px solid #3c3f4a; color: #bbb; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;">
           📝 Summarize
         </button>
-        <button class="quick-question" data-question="What are the main points?" style="padding: 6px 10px; background: #2a2a2e; border: 1px solid #333338; color: #bbb; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;">
+        <button class="quick-question" data-question="What are the main points?" style="padding: 6px 10px; background: #3c3f4a; border: 1px solid #3c3f4a; color: #bbb; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;">
           🎯 Main Points
         </button>
-        <button class="quick-question" data-question="Any actionable advice?" style="padding: 6px 10px; background: #2a2a2e; border: 1px solid #333338; color: #bbb; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;">
+        <button class="quick-question" data-question="Any actionable advice?" style="padding: 6px 10px; background: #3c3f4a; border: 1px solid #3c3f4a; color: #bbb; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;">
           ⚡ Action Items
         </button>
       </div>

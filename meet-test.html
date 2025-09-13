@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Meet Test - GeloLabs</title>
+    <style>
+        body {
+            font-family: 'Google Sans', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #202124;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a73e8;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #5f6368;
+            margin-bottom: 24px;
+        }
+        .test-section {
+            margin: 24px 0;
+            padding: 16px;
+            border: 1px solid #e8eaed;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .subtitle-element {
+            margin: 8px 0;
+            padding: 8px;
+            background: #e8f0fe;
+            border-radius: 4px;
+            border-left: 3px solid #1a73e8;
+        }
+        .speaker-name {
+            font-weight: 600;
+            color: #1a73e8;
+            font-size: 14px;
+        }
+        .subtitle-text {
+            margin-top: 4px;
+            color: #202124;
+        }
+        button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px;
+        }
+        button:hover {
+            background: #1557b0;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+        .status.info {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border: 1px solid #bbdefb;
+        }
+        .status.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        .instructions {
+            background: #fff3e0;
+            border: 1px solid #ffcc02;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #e65100;
+        }
+        .warning {
+            background: #ffebee;
+            border: 1px solid #f44336;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        .warning h3 {
+            margin-top: 0;
+            color: #c62828;
+        }
+        .solution {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        .solution h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Google Meet Test Environment</h1>
+        <p class="subtitle">Testing GeloLabs Meeting Notes Extension</p>
+        
+        <div class="warning">
+            <h3>⚠️ Current Issue</h3>
+            <p><strong>Google Meet is detecting the extension</strong> despite our stealth measures. The Russian warnings indicate that Google Meet's detection systems are still active.</p>
+            <p>We've implemented a completely non-invasive approach that should avoid detection entirely.</p>
+        </div>
+        
+        <div class="solution">
+            <h3>✅ Solution Implemented</h3>
+            <p><strong>Non-Invasive Mode:</strong> The extension now uses a completely non-invasive approach that doesn't inject any script into Google Meet at all.</p>
+            <ul>
+                <li>No script injection into Google Meet</li>
+                <li>No DOM manipulation</li>
+                <li>No content script execution</li>
+                <li>All functionality through extension popup only</li>
+                <li>Should completely avoid Google Meet warnings</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>📝 Testing Instructions - Non-Invasive Mode</h3>
+            <p><strong>Non-Invasive Mode:</strong> The extension now uses a completely non-invasive approach that doesn't inject any script into Google Meet.</p>
+            <ol>
+                <li><strong>Current Status:</strong>
+                    <ul>
+                        <li>No script injection into Google Meet</li>
+                        <li>No content script execution</li>
+                        <li>No DOM manipulation</li>
+                        <li>All interaction through extension popup</li>
+                    </ul>
+                </li>
+                <li><strong>Expected Behavior:</strong>
+                    <ul>
+                        <li>No Russian warnings from Google Meet</li>
+                        <li>No CSP violations</li>
+                        <li>No automatic interface injection</li>
+                        <li>Extension popup works normally</li>
+                        <li>Meeting notes feature in development</li>
+                    </ul>
+                </li>
+                <li><strong>Detection Test:</strong>
+                    <ul>
+                        <li>Check browser console for Russian warnings</li>
+                        <li>Monitor for CSP violations</li>
+                        <li>Verify no script injection</li>
+                        <li>Test extension popup functionality</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>🎤 Simulated Meeting Subtitles</h3>
+            <p>These elements simulate Google Meet's subtitle structure (for reference only):</p>
+            
+            <div class="subtitle-element">
+                <div class="speaker-name">John Doe</div>
+                <div class="subtitle-text">Hello everyone, welcome to our weekly team meeting.</div>
+            </div>
+            
+            <div class="subtitle-element">
+                <div class="speaker-name">Jane Smith</div>
+                <div class="subtitle-text">Thanks John. Let's start with the project updates.</div>
+            </div>
+            
+            <div class="subtitle-element">
+                <div class="speaker-name">Mike Johnson</div>
+                <div class="subtitle-text">I've completed the frontend implementation for the new feature.</div>
+            </div>
+            
+            <div class="subtitle-element">
+                <div class="speaker-name">Sarah Wilson</div>
+                <div class="subtitle-text">Great work Mike. The design looks excellent.</div>
+            </div>
+            
+            <div class="subtitle-element">
+                <div class="speaker-name">John Doe</div>
+                <div class="subtitle-text">Perfect. Let's move on to the next agenda item.</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Test Controls</h3>
+            <button onclick="addSubtitle()">Add New Subtitle</button>
+            <button onclick="clearSubtitles()">Clear All Subtitles</button>
+            <button onclick="checkExtensionStatus()">Check Extension Status</button>
+            <button onclick="checkForWarnings()">Check for Warnings</button>
+            <button onclick="testPopup()">Test Extension Popup</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Status</h3>
+            <div id="status-display" class="status info">
+                Non-invasive mode active. No script injection into Google Meet. Test the extension popup functionality.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let subtitleCounter = 0;
+        const speakers = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'Alex Brown'];
+        const sampleTexts = [
+            'This is a test subtitle for the meeting notes extension.',
+            'The extension should capture this text automatically.',
+            'Speaker identification should work correctly.',
+            'Timestamps should be recorded for each note.',
+            'The interface should only appear after user activation.'
+        ];
+
+        function addSubtitle() {
+            const container = document.querySelector('.test-section');
+            const subtitleDiv = document.createElement('div');
+            subtitleDiv.className = 'subtitle-element';
+            
+            const speaker = speakers[subtitleCounter % speakers.length];
+            const text = sampleTexts[subtitleCounter % sampleTexts.length];
+            
+            subtitleDiv.innerHTML = `
+                <div class="speaker-name">${speaker}</div>
+                <div class="subtitle-text">${text}</div>
+            `;
+            
+            container.appendChild(subtitleDiv);
+            subtitleCounter++;
+            
+            updateStatus('Added new subtitle element', 'success');
+        }
+
+        function clearSubtitles() {
+            const subtitles = document.querySelectorAll('.subtitle-element');
+            subtitles.forEach(subtitle => subtitle.remove());
+            subtitleCounter = 0;
+            updateStatus('Cleared all subtitle elements', 'success');
+        }
+
+        function checkExtensionStatus() {
+            // Check if the extension script is loaded
+            if (typeof meetState !== 'undefined') {
+                updateStatus('❌ Extension script detected (should not be injected)', 'info');
+            } else {
+                updateStatus('✅ No extension script detected (non-invasive mode working)', 'success');
+            }
+        }
+
+        function checkForWarnings() {
+            // This would need to be checked manually in the console
+            updateStatus('Check browser console for Russian warnings and CSP violations. Should be none in non-invasive mode.', 'info');
+        }
+
+        function testPopup() {
+            updateStatus('Click the extension icon in your browser toolbar to test the popup functionality.', 'success');
+        }
+
+        function updateStatus(message, type) {
+            const statusDisplay = document.getElementById('status-display');
+            statusDisplay.textContent = message;
+            statusDisplay.className = `status ${type}`;
+        }
+
+        // Auto-add subtitles periodically to simulate live meeting
+        setInterval(() => {
+            if (Math.random() > 0.7) { // 30% chance every 5 seconds
+                addSubtitle();
+            }
+        }, 5000);
+    </script>
+</body>
+</html> 

@@ -1,17 +1,24 @@
 # Chrome Web Store Listing
 
 ## Short Description (132 characters max)
-Your intelligent YouTube companion - Block distracting content and get AI-powered insights from any video.
+Your intelligent browser companion - Block YouTube Shorts, get AI insights, and capture Google Meet notes.
 
 ## Detailed Description (16,000 characters max)
 
-**Transform your YouTube experience with GeloLabs: Browser Copilot** - the intelligent extension that blocks distracting content and provides AI-powered video insights.
+**Transform your browsing experience with GeloLabs: Browser Copilot** - the intelligent extension that blocks distracting content, provides AI-powered video insights, and captures meeting notes from Google Meet.
 
 ## 🚫 Smart Content Blocking
 • **YouTube Shorts Blocker**: Automatically hide YouTube Shorts for distraction-free browsing
 • **Gaming Content Filter**: Remove gaming videos from recommendations with multi-language support
 • **One-Click Toggle**: Easy on/off control directly from the extension popup
 • **Intelligent Detection**: Only affects YouTube, leaves other websites completely untouched
+
+## 📝 Meeting Notes *(New!)*
+• **Google Meet Integration**: Automatically capture meeting notes from Google Meet
+• **Live Subtitle Capture**: Real-time transcription with speaker identification
+• **Timestamped Notes**: Each note includes speaker name and timestamp
+• **Export & Save**: Download notes as text files or save for later reference
+• **Smart Notifications**: Prompts to enable subtitles for optimal note-taking
 
 ## 🤖 AI Video Assistant (Powered by Google Gemini)
 • **Instant Video Analysis**: Click the GeloLabs icon in YouTube's header to ask questions about any video
@@ -35,12 +42,18 @@ Your intelligent YouTube companion - Block distracting content and get AI-powere
 • "Explain the concept mentioned at 5:30"
 • "What tools were recommended?"
 
+## 📝 Meeting Notes Usage
+• **Automatic Capture**: Join Google Meet with subtitles enabled
+• **Real-time Notes**: See speaker names and timestamps automatically
+• **Export Notes**: Download meeting notes as formatted text files
+• **Smart Interface**: Floating notes button for easy access during meetings
+
 ## 🔒 Privacy First
 • ✅ No data collection - your privacy is protected
 • ✅ Local processing when possible
 • ✅ Secure API key storage
 • ✅ Open source - full transparency
-• ✅ YouTube only - doesn't affect other websites
+• ✅ YouTube and Google Meet only - doesn't affect other websites
 
 ## 🛠️ Technical Features
 • Manifest V3 compliant
@@ -49,9 +62,9 @@ Your intelligent YouTube companion - Block distracting content and get AI-powere
 • Chrome 88+ compatible
 • Regular updates and improvements
 
-**Perfect for**: Students, professionals, researchers, and anyone who wants a more productive YouTube experience without distractions.
+**Perfect for**: Students, professionals, researchers, and anyone who wants a more productive browsing experience without distractions.
 
-**Get started today** - Install the extension and immediately enjoy distraction-free YouTube browsing. Add your free Google Gemini API key to unlock powerful AI video analysis features!
+**Get started today** - Install the extension and immediately enjoy distraction-free YouTube browsing and automatic Google Meet note-taking. Add your free Google Gemini API key to unlock powerful AI video analysis features!
 
 ---
 **Built by GeloLabs** - Making the web more productive, one extension at a time.
@@ -74,7 +87,7 @@ YouTube homepage with Shorts and gaming content filtered out, showing a cleaner,
 The popup showing time saved counter and productivity statistics from blocked content.
 
 ## Keywords (Comma-separated)
-youtube, shorts, blocker, ai, assistant, productivity, focus, distraction, video, analysis, gemini, transcript, summary, content, filter, gaming, copilot, browser, extension, youtube shorts blocker
+youtube, shorts, blocker, ai, assistant, productivity, focus, distraction, video, analysis, gemini, transcript, summary, content, filter, gaming, copilot, browser, extension, google meet, meeting notes, subtitles, speaker identification, youtube shorts blocker
 
 ## Category
 Productivity

@@ -1,0 +1,37 @@
+{
+  "timeZone": "America/New_York",
+  "dependencies": {
+    "enabledAdvancedServices": []
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/meet.readonly"
+  ],
+  "urlFetchWhitelist": [
+    "https://www.googleapis.com/*",
+    "https://meet.google.com/*"
+  ],
+  "addOns": {
+    "common": {
+      "name": "GeloLabs Meeting Notes",
+      "logoUrl": "https://www.gelolabs.com/logo.png",
+      "useLocaleFromApp": true,
+      "homepageTrigger": {
+        "runFunction": "onHomepage",
+        "enabled": true
+      },
+      "universalActions": [
+        {
+          "label": "Open Meeting Notes",
+          "runFunction": "onOpenMeetingNotes"
+        }
+      ]
+    },
+    "gmail": {},
+    "calendar": {},
+    "drive": {}
+  }
+}
